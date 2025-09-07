@@ -1,0 +1,30 @@
+{
+  "name": "@waggle/entity",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "pnpm rimraf dist && pnpm tsc -p ./tsconfig.json",
+    "migration:generate": "echo Run '''pnpm typeorm-ts-node-commonjs migration:generate -d ormconfig.ts migration/{name}'''",
+    "migration:run": "pnpm typeorm-ts-node-commonjs migration:run -d ormconfig.ts",
+    "migration:show": "pnpm typeorm-ts-node-commonjs migration:show -d ormconfig.ts",
+    "migration:revert": "pnpm typeorm-ts-node-commonjs migration:revert -d ormconfig.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mysql2": "^3.12.0",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.6",
+    "rimraf": "^6.0.1",
+    "source-map-support": "^0.5.21",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.3"
+  }
+}
