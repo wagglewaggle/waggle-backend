@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, FindOptionsWhere, Repository } from 'typeorm';
-import { Ip } from 'waggle-entity/dist/ip/ip.entity';
 
 @Injectable()
 export class IpRepository {

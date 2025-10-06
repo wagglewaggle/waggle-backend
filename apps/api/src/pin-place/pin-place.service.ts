@@ -1,6 +1,4 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
-import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
 import { PlaceType } from '../app/app.constant';
 import ERROR_CODE from '../app/exceptions/error-code';
 import { ClientRequestException } from '../app/exceptions/request.exception';
@@ -8,10 +6,9 @@ import { KtPlaceService } from '../kt-place/kt-place.service';
 import { SktPlaceService } from '../skt-place/skt-place.service';
 import { UserEntity } from '../user/entity/user.entity';
 import { PinPlaceRepository } from './pin-place.repository';
-import { PinPlace } from 'waggle-entity/dist/pin-place/pin-place.entity';
 import { PinPlaceBodyDto } from './pin-place.dto';
 import { ExtraPlaceService } from '../extra-place/extra-place.service';
-import { ExtraPlace } from 'waggle-entity/dist/extra-place/extra-place.entity';
+import { ExtraPlace, KtPlace, PinPlace, SktPlace } from '@waggle/entity';
 
 @Injectable()
 export class PinPlaceService {

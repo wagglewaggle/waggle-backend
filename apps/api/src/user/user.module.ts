@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReviewPostModule } from '../review-post/review-post.module';
 import { PinReviewPostModule } from '../pin-review-post/pin-review-post.module';
 import { ReplyModule } from '../reply/reply.module';
-import { User } from 'waggle-entity/dist/user/user.entity';
+import { User } from '@waggle/entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), ReviewPostModule, PinReviewPostModule, ReplyModule],

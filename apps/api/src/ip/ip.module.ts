@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Ip } from 'waggle-entity/dist/ip/ip.entity';
 import { IpRepository } from './ip.repository';
 import { IpService } from './ip.service';
 

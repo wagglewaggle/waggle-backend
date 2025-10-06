@@ -1,8 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
-import { PinReviewPost } from 'waggle-entity/dist/pin-review-post/pin-review-post.entity';
-import { ReviewPost } from 'waggle-entity/dist/review-post/review-post.entity';
 import { ReviewPostEntity } from '../../review-post/entity/review-post.entity';
 import { ReviewPostSimpleResponseDto } from '../../review-post/dtos/review-post-simple-response.dto';
+import { PinReviewPost, ReviewPost } from '@waggle/entity';
 
 export class PinReviewPostResponseDto {
   @Exclude() private readonly _idx: number;

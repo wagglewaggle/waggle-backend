@@ -10,7 +10,7 @@ export class MysqlConfigService implements TypeOrmOptionsFactory {
       username: config.mysqlUsername,
       password: config.mysqlPassword,
       database: config.mysqlDatabase,
-      entities: ['./.yarn/cache/waggle-entity-*/node_modules/waggle-entity/dist/**/*.entity.js'],
+      entities: ['./.yarn/cache/@waggle/entity-*/node_modules/@waggle/entity/dist/**/*.entity.js'],
       timezone: 'Z',
       logging: false,
       synchronize: false,

@@ -3,7 +3,7 @@ import { SktPlaceService } from './skt-place.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SktPlaceRepository } from './skt-place.repository';
 import { LocationModule } from '../location/location.module';
-import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
+import { SktPlace } from '@waggle/entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([SktPlace]), LocationModule],

@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { ReviewPostStatus } from 'waggle-entity/dist/review-post/review-post.constant';
-import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
 import { PlaceListFilterQueryDto } from '../place/place.dto';
+import { ReviewPostStatus, SktPlace } from '@waggle/entity';
 
 @Injectable()
 export class SktPlaceRepository {

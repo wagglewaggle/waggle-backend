@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { KtPlaceService } from './kt-place.service';
 import { KtPlaceRepository } from './kt-place.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
 import { LocationModule } from '../location/location.module';
+import { KtPlace } from '@waggle/entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([KtPlace]), LocationModule],

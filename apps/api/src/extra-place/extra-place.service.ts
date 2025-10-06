@@ -1,9 +1,9 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ExtraPlace } from 'waggle-entity/dist/extra-place/extra-place.entity';
 import ERROR_CODE from '../app/exceptions/error-code';
 import { ClientRequestException } from '../app/exceptions/request.exception';
 import { ExtraPlaceRepository } from './extra-place.repository';
 import { PlaceListFilterQueryDto } from '../place/place.dto';
+import { ExtraPlace } from '@waggle/entity';
 
 @Injectable()
 export class ExtraPlaceService {

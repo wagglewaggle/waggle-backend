@@ -12,9 +12,7 @@ import { HttpStatus } from '@nestjs/common';
 import { TokenPayloadEntity } from '../user-token/entity/token-payload.entity';
 import { jwtAccessTokenSign, jwtRefreshTokenSign } from '../app/app.util';
 import { UserTokenService } from '../user-token/user-token.service';
-import { SnsType } from 'waggle-entity/dist/user/user.constant';
-import { UserTokenStatus } from 'waggle-entity/dist/user-token/user-token.constant';
-import { UserRoleType } from 'waggle-entity/dist/user-role/user-role.constant';
+import { SnsType, UserRoleType, UserTokenStatus } from '@waggle/entity';
 
 export abstract class BaseAuthService {
   readonly userService: UserService;

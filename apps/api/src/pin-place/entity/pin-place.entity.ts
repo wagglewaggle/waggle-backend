@@ -1,7 +1,4 @@
-import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
-import { PinPlace } from 'waggle-entity/dist/pin-place/pin-place.entity';
-import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
-import { User } from 'waggle-entity/dist/user/user.entity';
+import { KtPlace, PinPlace, SktPlace, User } from '@waggle/entity';
 
 export class PinPlaceEntity extends PinPlace {
   readonly idx: number;

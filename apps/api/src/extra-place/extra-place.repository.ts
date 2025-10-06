@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { ExtraPlace } from 'waggle-entity/dist/extra-place/extra-place.entity';
 import { PlaceListFilterQueryDto } from '../place/place.dto';
-import { ReviewPostStatus } from 'waggle-entity/dist/review-post/review-post.constant';
+import { ExtraPlace, ReviewPostStatus } from '@waggle/entity';
 
 @Injectable()
 export class ExtraPlaceRepository {

@@ -2,10 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { ClientRequestException } from '../../app/exceptions/request.exception';
 import ERROR_CODE from '../../app/exceptions/error-code';
 import { plainToInstance } from 'class-transformer';
-import { User } from 'waggle-entity/dist/user/user.entity';
-import { SnsType, UserStatus } from 'waggle-entity/dist/user/user.constant';
-import { UserRole } from 'waggle-entity/dist/user-role/user-role.entity';
-import { UserRoleType } from 'waggle-entity/dist/user-role/user-role.constant';
+import { SnsType, User, UserRole, UserRoleType, UserStatus } from '@waggle/entity';
 
 export class UserEntity extends User {
   readonly idx: number;

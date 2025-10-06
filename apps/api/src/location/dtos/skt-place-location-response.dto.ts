@@ -1,9 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Category } from 'waggle-entity/dist/category/category.entity';
 import { CategoryResponseDto } from '../../category/dtos/category-response.dto';
-import { SktPopulation } from 'waggle-entity/dist/skt-population/skt-population.entity';
-import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
 import { SktPopulationResponseDto } from '../../skt-place/dtos/skt-population-response.dto';
+import { Category, SktPlace, SktPopulation } from '@waggle/entity';
 
 export class SktPlaceLocationResponseDto {
   @Exclude() private readonly _idx: number;

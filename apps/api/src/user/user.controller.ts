@@ -17,7 +17,6 @@ import { PinReviewPostService } from '../pin-review-post/pin-review-post.service
 import { ListFilterPipe } from '../app/pipe/common.pipe';
 import { ReplyService } from '../reply/reply.service';
 import { UserRepliesResponseDto } from './dtos/user-replies-response.dto';
-import { UserStatus } from 'waggle-entity/dist/user/user.constant';
 
 @Controller(ApiPath.Root)
 @UseGuards(UserGuard)

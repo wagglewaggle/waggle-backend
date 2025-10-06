@@ -4,7 +4,7 @@ import { ClientRequestException } from '../app/exceptions/request.exception';
 import { LocationService } from '../location/location.service';
 import { SktPlaceRepository } from './skt-place.repository';
 import { PlaceListFilterQueryDto } from '../place/place.dto';
-import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
+import { SktPlace } from '@waggle/entity';
 
 @Injectable()
 export class SktPlaceService {

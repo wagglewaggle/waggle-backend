@@ -1,6 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-import { KtPopulationLevel } from 'waggle-entity/dist/kt-population/kt-population.constant';
-import { KtPopulation } from 'waggle-entity/dist/kt-population/kt-population.entity';
+import { KtPopulation, KtPopulationLevel } from '@waggle/entity';
 
 export class KtPopulationResponseDto {
   @Exclude() private readonly _idx: number;

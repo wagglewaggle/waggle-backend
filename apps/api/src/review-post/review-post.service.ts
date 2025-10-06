@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ReviewPostStatus } from 'waggle-entity/dist/review-post/review-post.constant';
 import { DEFAULT_REPORT_COUNT, PlaceType } from '../app/app.constant';
 import { PlaceService } from '../place/place.service';
 import { UserEntity } from '../user/entity/user.entity';
@@ -11,6 +10,7 @@ import { ReviewPostEntity } from './entity/review-post.entity';
 import { SlackService } from '../app/slack/slack.service';
 import { ReviewPostReportService } from '../review-post-report/review-post-report.service';
 import { DataSource, QueryRunner } from 'typeorm';
+import { ReviewPostStatus } from '@waggle/entity';
 
 @Injectable()
 export class ReviewPostService {

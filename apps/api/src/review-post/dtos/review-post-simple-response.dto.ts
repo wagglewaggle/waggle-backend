@@ -1,17 +1,10 @@
 import { Exclude, Expose } from 'class-transformer';
-import { ExtraPlace } from 'waggle-entity/dist/extra-place/extra-place.entity';
-import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
-import { PinReviewPost } from 'waggle-entity/dist/pin-review-post/pin-review-post.entity';
-import { Reply } from 'waggle-entity/dist/reply/reply.entity';
-import { ReviewPostImage } from 'waggle-entity/dist/review-post-image/review-post-image.entity';
-import { ReviewPostStatus } from 'waggle-entity/dist/review-post/review-post.constant';
-import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
-import { User } from 'waggle-entity/dist/user/user.entity';
 import { PlaceResponseDto } from '../../place/dtos/place-response.dto';
 import { PlaceEntity } from '../../place/entity/place.entity';
 import { UserResponseDto } from '../../user/dtos/user-response.dto';
 import { UserEntity } from '../../user/entity/user.entity';
 import { ReviewPostEntity } from '../entity/review-post.entity';
+import { ExtraPlace, KtPlace, PinReviewPost, Reply, ReviewPostImage, ReviewPostStatus, SktPlace, User } from '@waggle/entity';
 
 export class ReviewPostSimpleResponseDto {
   @Exclude() protected readonly _idx: number;

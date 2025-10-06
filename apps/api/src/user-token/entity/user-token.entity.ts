@@ -1,6 +1,4 @@
-import { UserTokenStatus } from 'waggle-entity/dist/user-token/user-token.constant';
-import { UserToken } from 'waggle-entity/dist/user-token/user-token.entity';
-import { User } from 'waggle-entity/dist/user/user.entity';
+import { User, UserToken, UserTokenStatus } from '@waggle/entity';
 
 export class UserTokenEntity extends UserToken {
   readonly idx: number;

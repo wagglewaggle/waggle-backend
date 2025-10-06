@@ -1,6 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-import { CategoryType } from 'waggle-entity/dist/category/category.constant';
-import { Category } from 'waggle-entity/dist/category/category.entity';
+import { Category, CategoryType } from '@waggle/entity';
 
 export class CategoryResponseDto {
   @Exclude() private readonly _idx: number;

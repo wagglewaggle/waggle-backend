@@ -1,10 +1,10 @@
 import { forwardRef, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { PinReviewPost } from 'waggle-entity/dist/pin-review-post/pin-review-post.entity';
 import { ReviewPostService } from '../review-post/review-post.service';
 import { UserEntity } from '../user/entity/user.entity';
 import { PinReviewPostRepository } from './pin-review-post.repository';
 import { ClientRequestException } from '../app/exceptions/request.exception';
 import ERROR_CODE from '../app/exceptions/error-code';
+import { PinReviewPost } from '@waggle/entity';
 
 @Injectable()
 export class PinReviewPostService {

@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, EntityManager, FindOptionsWhere, Repository } from 'typeorm';
-import { UserToken } from 'waggle-entity/dist/user-token/user-token.entity';
 import { UserTokenEntity } from './entity/user-token.entity';
-import { UserTokenStatus } from 'waggle-entity/dist/user-token/user-token.constant';
+import { UserToken, UserTokenStatus } from '@waggle/entity';
 
 @Injectable()
 export class UserTokenRepository {

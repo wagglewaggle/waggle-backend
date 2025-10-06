@@ -3,8 +3,7 @@ import { DeepPartial, EntityManager } from 'typeorm';
 import { UserRepository } from './user.repository';
 import { UserEntity } from './entity/user.entity';
 import { ModifyUserSettingBodyDto } from './user.interface';
-import { User } from 'waggle-entity/dist/user/user.entity';
-import { SnsType, UserStatus } from 'waggle-entity/dist/user/user.constant';
+import { SnsType, User, UserStatus } from '@waggle/entity';
 
 @Injectable()
 export class UserService {

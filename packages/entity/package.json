@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "pnpm rimraf dist && pnpm tsc -p ./tsconfig.json",
-    "migration:generate": "echo Run '''pnpm typeorm-ts-node-commonjs migration:generate -d ormconfig.ts migration/{name}'''",
+    "migration:generate": "echo Run '''pnpm typeorm-ts-node-commonjs migration:generate -d ormconfig.ts migrations/{name}'''",
     "migration:run": "pnpm typeorm-ts-node-commonjs migration:run -d ormconfig.ts",
     "migration:show": "pnpm typeorm-ts-node-commonjs migration:show -d ormconfig.ts",
     "migration:revert": "pnpm typeorm-ts-node-commonjs migration:revert -d ormconfig.ts"

@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ReplyStatus } from 'waggle-entity/dist/reply/reply.constant';
 import { UserEntity } from '../user/entity/user.entity';
 import { ReplyRepository } from './reply.repository';
 import { DEFAULT_REPORT_COUNT, PlaceType } from '../app/app.constant';
@@ -10,8 +9,8 @@ import { GetReplyIdxParamDto } from './reply.dto';
 import { SlackService } from '../app/slack/slack.service';
 import { ReplyReportService } from '../reply-report/reply-report.service';
 import { DataSource, QueryRunner } from 'typeorm';
-import { Reply } from 'waggle-entity/dist/reply/reply.entity';
 import { ListFilterQueryDto } from '../app/app.dto';
+import { Reply, ReplyStatus } from '@waggle/entity';
 
 @Injectable()
 export class ReplyService {

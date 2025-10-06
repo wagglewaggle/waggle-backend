@@ -1,19 +1,11 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Cctv } from 'waggle-entity/dist/cctv/cctv.entity';
-import { KtAccident } from 'waggle-entity/dist/kt-accident/kt-accident.entity';
-import { KtPopulation } from 'waggle-entity/dist/kt-population/kt-population.entity';
-import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
 import { KtPopulationResponseDto } from './kt-population-response.dto';
 import { KtAccidentResponseDto } from './kt-accident-response.dto';
-import { Category } from 'waggle-entity/dist/category/category.entity';
 import { CategoryResponseDto } from '../../category/dtos/category-response.dto';
 import { KtCctvResponseDto } from './kt-cctv-response.dto';
-import { KtRoadTraffic } from 'waggle-entity/dist/kt-road-traffic/kt-road-traffic.entity';
 import { KtRoadTrafficResponseDto } from './kt-road-traffic-response.dto';
-import { Location } from 'waggle-entity/dist/location/location.entity';
 import { LocationResponseDto } from '../../location/dtos/location-response.dto';
-import { PinPlace } from 'waggle-entity/dist/pin-place/pin-place.entity';
-import { ReviewPost } from 'waggle-entity/dist/review-post/review-post.entity';
+import { Category, Cctv, KtAccident, KtPlace, KtPopulation, KtRoadTraffic, Location, PinPlace, ReviewPost } from '@waggle/entity';
 
 export class KtPlaceResponseDto {
   @Exclude() private readonly _idx: number;

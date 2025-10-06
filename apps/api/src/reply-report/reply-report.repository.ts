@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
-import { ReplyReport } from 'waggle-entity/dist/reply-report/reply-report.entity';
 import { UserEntity } from '../user/entity/user.entity';
-import { Reply } from 'waggle-entity/dist/reply/reply.entity';
+import { Reply, ReplyReport } from '@waggle/entity';
 
 @Injectable()
 export class ReplyReportRepository {

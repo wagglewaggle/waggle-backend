@@ -1,15 +1,10 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Category } from 'waggle-entity/dist/category/category.entity';
-import { KtPopulation } from 'waggle-entity/dist/kt-population/kt-population.entity';
-import { SktPopulation } from 'waggle-entity/dist/skt-population/skt-population.entity';
 import { CategoryResponseDto } from '../../category/dtos/category-response.dto';
 import { KtPopulationResponseDto } from '../../kt-place/dtos/kt-population-response.dto';
 import { SktPopulationResponseDto } from '../../skt-place/dtos/skt-population-response.dto';
 import { PlaceEntity } from '../entity/place.entity';
 import { PlaceType } from '../../app/app.constant';
-import { Cctv } from 'waggle-entity/dist/cctv/cctv.entity';
-import { PinPlace } from 'waggle-entity/dist/pin-place/pin-place.entity';
-import { ReviewPost } from 'waggle-entity/dist/review-post/review-post.entity';
+import { Category, Cctv, KtPopulation, PinPlace, ReviewPost, SktPopulation } from '@waggle/entity';
 
 export class PlaceResponseDto {
   @Exclude() private readonly _idx: number;

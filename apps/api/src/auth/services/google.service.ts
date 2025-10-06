@@ -11,8 +11,6 @@ import { UserRoleService } from '../../user-role/user-role.service';
 import { DataSource } from 'typeorm';
 import { IGoogleInformationResponse, IGoogleTokenResponse } from '../auth-platform.interface';
 import { UserTokenService } from '../../user-token/user-token.service';
-import { UserStatus } from 'waggle-entity/dist/user/user.constant';
-import { SnsType } from 'waggle-entity/dist/user/user.constant';
 import { config } from '../../app/config/config.service';
 
 @Injectable()

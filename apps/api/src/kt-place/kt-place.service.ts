@@ -1,10 +1,10 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
 import ERROR_CODE from '../app/exceptions/error-code';
 import { ClientRequestException } from '../app/exceptions/request.exception';
 import { KtPlaceRepository } from './kt-place.repository';
 import { LocationService } from '../location/location.service';
 import { PlaceListFilterQueryDto } from '../place/place.dto';
+import { KtPlace } from '@waggle/entity';
 
 @Injectable()
 export class KtPlaceService {

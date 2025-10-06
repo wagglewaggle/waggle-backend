@@ -1,8 +1,8 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Entity, EntityManager, Repository } from 'typeorm';
-import { ReviewPostReport } from 'waggle-entity/dist/review-post-report/review-post-report.entity';
 import { UserEntity } from '../user/entity/user.entity';
 import { ReviewPostEntity } from '../review-post/entity/review-post.entity';
+import { ReviewPostReport } from '@waggle/entity';
 
 @Entity()
 export class ReviewPostReportRepository {

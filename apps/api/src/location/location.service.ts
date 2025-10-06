@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { Location } from 'waggle-entity/dist/location/location.entity';
 import { LocationRepository } from './location.repository';
 import { ClientRequestException } from '../app/exceptions/request.exception';
 import ERROR_CODE from '../app/exceptions/error-code';
+import { Location } from '@waggle/entity';
 
 @Injectable()
 export class LocationService {

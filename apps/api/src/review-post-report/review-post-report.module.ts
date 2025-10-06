@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ReviewPostReport } from 'waggle-entity/dist/review-post-report/review-post-report.entity';
 import { ReviewPostReportRepository } from './review-post-report.repository';
 import { ReviewPostReportService } from './review-post-report.service';
+import { ReviewPostReport } from '@waggle/entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ReviewPostReport])],

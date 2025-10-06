@@ -1,5 +1,5 @@
-import { SnsType } from 'waggle-entity/dist/user/user.constant';
 import { UserEntity } from '../../user/entity/user.entity';
+import { SnsType } from '@waggle/entity';
 
 export class TokenPayloadEntity {
   readonly idx: number;

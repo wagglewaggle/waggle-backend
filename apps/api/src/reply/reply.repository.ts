@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, EntityManager, FindOptionsWhere, Repository } from 'typeorm';
-import { Reply } from 'waggle-entity/dist/reply/reply.entity';
 import { UserEntity } from '../user/entity/user.entity';
 import { ListFilterQueryDto } from '../app/app.dto';
-import { ReplyStatus } from 'waggle-entity/dist/reply/reply.constant';
+import { Reply, ReplyStatus } from '@waggle/entity';
 
 @Injectable()
 export class ReplyRepository {

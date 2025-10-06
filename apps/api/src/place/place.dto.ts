@@ -1,8 +1,8 @@
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsOptional, Validate } from 'class-validator';
-import { CategoryType } from 'waggle-entity/dist/category/category.constant';
 import { IsCategoryType } from '../app/validations/common.validation';
 import { PopulationLevel } from './place.constant';
+import { CategoryType } from '@waggle/entity';
 
 export class PlaceListFilterQueryDto {
   @Transform(({ value }) => value === 'true')

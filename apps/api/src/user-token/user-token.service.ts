@@ -7,8 +7,7 @@ import { ClientRequestException } from '../app/exceptions/request.exception';
 import ERROR_CODE from '../app/exceptions/error-code';
 import { TokenPayloadEntity } from './entity/token-payload.entity';
 import { jwtAccessTokenSign, jwtVerify } from '../app/app.util';
-import { UserToken } from 'waggle-entity/dist/user-token/user-token.entity';
-import { UserTokenStatus } from 'waggle-entity/dist/user-token/user-token.constant';
+import { UserToken, UserTokenStatus } from '@waggle/entity';
 
 @Injectable()
 export class UserTokenService {
