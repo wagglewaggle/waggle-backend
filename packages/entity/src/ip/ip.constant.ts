@@ -1,4 +1,4 @@
-export enum KtPlaceStatus {
+export enum IpStatus {
   Activated = 'ACTIVATED',
   Deactivated = 'DEACTIVATED',
 }

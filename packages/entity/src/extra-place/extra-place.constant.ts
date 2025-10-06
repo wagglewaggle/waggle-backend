@@ -1,4 +1,4 @@
-export enum SktPlaceStatus {
+export enum ExtraPlaceStatus {
   Activated = 'ACTIVATED',
   Deactivated = 'DEACTIVATED',
 }

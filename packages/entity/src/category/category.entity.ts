@@ -1,14 +1,15 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ExtraPlace } from '../extra-place/extra-place.entity';
 import { KtPlace } from '../kt-place/kt-place.entity';
 import { SktPlace } from '../skt-place/skt-place.entity';
-import { CategoryType } from '../category-type/category-type.entity';
+import { CategoryType } from './category.constant';
 
 @Entity()
 export class Category {
   @PrimaryGeneratedColumn()
   idx: number;
 
-  @ManyToOne(() => CategoryType, (categoryType) => categoryType.categories)
+  @Column('enum', { enum: CategoryType })
   type: CategoryType;
 
   @ManyToOne(() => KtPlace, (ktPlace) => ktPlace.categories)
@@ -16,4 +17,7 @@ export class Category {
 
   @ManyToOne(() => SktPlace, (sktPlace) => sktPlace.categories)
   sktPlace: SktPlace;
+
+  @ManyToOne(() => ExtraPlace, (extraPlace) => extraPlace.categories)
+  extraPlace: ExtraPlace;
 }
