@@ -1,27 +1,39 @@
 import { Exclude, Expose } from 'class-transformer';
+import { Cctv } from 'waggle-entity/dist/cctv/cctv.entity';
+import { KtAccident } from 'waggle-entity/dist/kt-accident/kt-accident.entity';
+import { KtPopulation } from 'waggle-entity/dist/kt-population/kt-population.entity';
+import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
 import { KtPopulationResponseDto } from './kt-population-response.dto';
 import { KtAccidentResponseDto } from './kt-accident-response.dto';
-import { CategoryTypeResponseDto } from '../../category/dtos/category-type-response.dto';
-import { CctvResponseDto } from '../../cctv/dto/cctv-response.dto';
+import { Category } from 'waggle-entity/dist/category/category.entity';
+import { CategoryResponseDto } from '../../category/dtos/category-response.dto';
+import { KtCctvResponseDto } from './kt-cctv-response.dto';
+import { KtRoadTraffic } from 'waggle-entity/dist/kt-road-traffic/kt-road-traffic.entity';
 import { KtRoadTrafficResponseDto } from './kt-road-traffic-response.dto';
+import { Location } from 'waggle-entity/dist/location/location.entity';
 import { LocationResponseDto } from '../../location/dtos/location-response.dto';
-import { Category, KtPopulation, KtAccident, Cctv, KtRoadTraffic, KtPlace, Location } from '@waggle/entity';
+import { PinPlace } from 'waggle-entity/dist/pin-place/pin-place.entity';
+import { ReviewPost } from 'waggle-entity/dist/review-post/review-post.entity';
 
 export class KtPlaceResponseDto {
   @Exclude() private readonly _idx: number;
   @Exclude() private readonly _name: string;
+  @Exclude() private readonly _address: string;
   @Exclude() private readonly _x: number;
   @Exclude() private readonly _y: number;
-  @Exclude() private readonly _categories: Category[] | undefined;
-  @Exclude() private readonly _population: KtPopulation | undefined;
-  @Exclude() private readonly _accidents: KtAccident[] | undefined;
-  @Exclude() private readonly _cctvs: Cctv[] | undefined;
-  @Exclude() private readonly _roadTraffic: KtRoadTraffic | undefined;
-  @Exclude() private readonly _location: Location | undefined;
+  @Exclude() private readonly _categories?: Category[];
+  @Exclude() private readonly _population?: KtPopulation;
+  @Exclude() private readonly _accidents?: KtAccident[];
+  @Exclude() private readonly _cctvs?: Cctv[];
+  @Exclude() private readonly _roadTraffic?: KtRoadTraffic;
+  @Exclude() private readonly _location?: Location;
+  @Exclude() private readonly _reviewPosts?: ReviewPost[];
+  @Exclude() private readonly _pinPlaces?: PinPlace[];
 
-  constructor(place: KtPlace, location?: Location) {
+  constructor(place: KtPlace) {
     this._idx = place.idx;
     this._name = place.name;
+    this._address = place.address;
     this._x = place.x;
     this._y = place.y;
     this._categories = place.categories;
@@ -29,7 +41,9 @@ export class KtPlaceResponseDto {
     this._accidents = place.accidents;
     this._cctvs = place.cctvs;
     this._roadTraffic = place.ktRoadTraffic;
-    this._location = location;
+    this._location = place.location;
+    this._reviewPosts = place.reviewPosts;
+    this._pinPlaces = place.pinPlaces;
   }
 
   @Expose()
@@ -43,6 +57,11 @@ export class KtPlaceResponseDto {
   }
 
   @Expose()
+  get address(): string {
+    return this._address;
+  }
+
+  @Expose()
   get x(): number {
     return this._x;
   }
@@ -53,11 +72,26 @@ export class KtPlaceResponseDto {
   }
 
   @Expose()
-  get categories(): CategoryTypeResponseDto[] | undefined {
+  get reviewPostCount(): number {
+    return this._reviewPosts ? this._reviewPosts.length : 0;
+  }
+
+  @Expose()
+  get pinPlaceCount(): number {
+    return this._pinPlaces ? this._pinPlaces.length : 0;
+  }
+
+  @Expose()
+  get cctvCount(): number {
+    return this._cctvs ? this._cctvs.length : 0;
+  }
+
+  @Expose()
+  get categories(): CategoryResponseDto[] | undefined {
     if (!this._categories) {
       return undefined;
     }
-    return this._categories.map((category) => new CategoryTypeResponseDto(category.type));
+    return this._categories.map((category) => new CategoryResponseDto(category));
   }
 
   @Expose()
@@ -77,11 +111,11 @@ export class KtPlaceResponseDto {
   }
 
   @Expose()
-  get cctvs(): CctvResponseDto[] | undefined {
+  get cctvs(): KtCctvResponseDto[] | undefined {
     if (!this._cctvs) {
       return undefined;
     }
-    return this._cctvs.map((cctv) => new CctvResponseDto(cctv));
+    return this._cctvs.map((cctv) => new KtCctvResponseDto(cctv));
   }
 
   @Expose()

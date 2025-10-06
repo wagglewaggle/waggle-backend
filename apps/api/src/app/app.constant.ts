@@ -1,4 +1,7 @@
-export enum Authentications {
-  Password = 1,
-  Otp = 2,
+export enum PlaceType {
+  Kt = 'KT',
+  Skt = 'SKT',
+  Extra = 'EXTRA',
 }
+
+export const DEFAULT_REPORT_COUNT = 3;

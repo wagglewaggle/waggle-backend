@@ -1,7 +1,9 @@
 import { Exclude, Expose } from 'class-transformer';
-import { CategoryTypeResponseDto } from '../../category/dtos/category-type-response.dto';
+import { Category } from 'waggle-entity/dist/category/category.entity';
+import { CategoryResponseDto } from '../../category/dtos/category-response.dto';
+import { SktPopulation } from 'waggle-entity/dist/skt-population/skt-population.entity';
+import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
 import { SktPopulationResponseDto } from '../../skt-place/dtos/skt-population-response.dto';
-import { Category, SktPopulation, SktPlace } from '@waggle/entity';
 
 export class SktPlaceLocationResponseDto {
   @Exclude() private readonly _idx: number;
@@ -27,8 +29,8 @@ export class SktPlaceLocationResponseDto {
   }
 
   @Expose()
-  get categories(): CategoryTypeResponseDto[] {
-    return this._categories.map((category) => new CategoryTypeResponseDto(category.type));
+  get categories(): CategoryResponseDto[] {
+    return this._categories.map((category) => new CategoryResponseDto(category));
   }
 
   @Expose()

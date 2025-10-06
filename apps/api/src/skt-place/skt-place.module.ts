@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
 import { SktPlaceService } from './skt-place.service';
-import { SktPlaceController } from './skt-place.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SktPlaceRepository } from './skt-place.repository';
 import { LocationModule } from '../location/location.module';
-import { SktPlace } from '@waggle/entity';
+import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([SktPlace]), LocationModule],
   providers: [SktPlaceService, SktPlaceRepository],
-  controllers: [SktPlaceController],
+  exports: [TypeOrmModule.forFeature([SktPlace]), SktPlaceService],
 })
 export class SktPlaceModule {}

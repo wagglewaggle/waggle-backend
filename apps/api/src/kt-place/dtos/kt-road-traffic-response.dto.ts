@@ -1,5 +1,6 @@
-import { KtPlace, KtRoadTraffic } from '@waggle/entity';
 import { Exclude, Expose } from 'class-transformer';
+import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
+import { KtRoadTraffic } from 'waggle-entity/dist/kt-road-traffic/kt-road-traffic.entity';
 
 export class KtRoadTrafficResponseDto {
   @Exclude() private readonly _idx: number;

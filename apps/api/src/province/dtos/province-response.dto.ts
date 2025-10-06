@@ -1,5 +1,7 @@
-import { KtPlace, SktPlace, Province } from '@waggle/entity';
 import { Exclude, Expose } from 'class-transformer';
+import { KtPlace } from 'waggle-entity/dist/kt-place/kt-place.entity';
+import { SktPlace } from 'waggle-entity/dist/skt-place/skt-place.entity';
+import { Province } from 'waggle-entity/dist/province/province.entity';
 
 export class ProvinceResponseDto {
   @Exclude() private readonly _idx: number;

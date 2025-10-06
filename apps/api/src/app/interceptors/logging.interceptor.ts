@@ -1,22 +1,23 @@
-import { CallHandler, ExecutionContext, HttpException, Injectable, InternalServerErrorException, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, HttpException, HttpStatus, Injectable, InternalServerErrorException, NestInterceptor } from '@nestjs/common';
+import { Request } from 'express';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { ClientRequestException } from '../exceptions/request.exception';
 import { LoggerService } from '../logger/logger.service';
-import { IRequestAugmented } from '../app.interface';
 import { getClientIp } from 'request-ip';
-import { ILoggingObject } from './logging.constant';
+import errorMessage from '../exceptions/error-code/message.ko';
+import ERROR_CODE from '../exceptions/error-code';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private readonly LOGGER_MESSAGE = 'clientRequest';
-  private logObj: ILoggingObject;
 
-  constructor(private readonly loggerService: LoggerService) {}
+  constructor(private readonly logger: LoggerService) {}
 
   intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
     const http = context.switchToHttp();
-    const req = http.getRequest<IRequestAugmented>();
+    const req = http.getRequest<Request>();
 
-    this.logObj = {
+    const logObj = {
       success: true,
       startTime: new Date().toISOString(),
       endTime: null,
@@ -36,30 +37,44 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(() => {
-        this.logObj.success = true;
+        logObj.success = true;
+        this.calculateTimes(logObj);
 
-        this.calculateElapsedTime();
-
-        this.loggerService.log(this.LOGGER_MESSAGE, this.logObj);
+        this.logger.log(this.LOGGER_MESSAGE, logObj);
       }),
       catchError((e) => {
-        this.logObj.success = false;
+        logObj.success = false;
 
-        this.logObj.error = JSON.stringify(e);
-        this.logObj.errorStack = e.stack;
-        this.logObj.errorMessage = e.message;
-
-        this.calculateElapsedTime();
-
-        this.loggerService.error(this.LOGGER_MESSAGE, this.logObj);
+        this.getErrorInfo(logObj, e);
+        this.calculateTimes(logObj);
+        this.logger.error(this.LOGGER_MESSAGE, logObj);
 
         return throwError(() => (e instanceof HttpException ? e : new InternalServerErrorException(e)));
       }),
     );
   }
 
-  calculateElapsedTime() {
-    this.logObj.endTime = new Date().toISOString();
-    this.logObj.elapsedTime = new Date(this.logObj.endTime).getTime() - new Date(this.logObj.startTime).getTime();
+  calculateTimes(target) {
+    target.endTime = new Date().toISOString();
+    target.elapsedTime = new Date(target.endTime).getTime() - new Date(target.startTime).getTime();
+  }
+
+  getErrorInfo(target, e) {
+    target.error = JSON.stringify(e);
+    target.errorStack = e.stack;
+
+    if (e instanceof ClientRequestException) {
+      target.errorMessage = e.message;
+      target.errorCode = this.getErrorCode(e.message);
+    }
+  }
+
+  getErrorCode(message: string): string {
+    const errorCodes = Object.keys(errorMessage);
+    const result = errorCodes.find((code) => ERROR_CODE[code] === message);
+    if (result) {
+      return result;
+    }
+    throw new ClientRequestException(ERROR_CODE.ERR_0000001, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

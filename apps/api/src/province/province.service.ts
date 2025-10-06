@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Province } from 'waggle-entity/dist/province/province.entity';
 import { ProvinceRepository } from './province.repository';
-import { Province } from '@waggle/entity';
 
 @Injectable()
 export class ProvinceService {

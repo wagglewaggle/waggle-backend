@@ -1,11 +1,9 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { Location } from '@waggle/entity';
+import { Location } from 'waggle-entity/dist/location/location.entity';
 import { GetLocationNameParamDto } from './location.dto';
 import { LocationService } from './location.service';
-import { ApiPath } from './location.constant';
-import { LocationResponseDto } from './dtos/location-response.dto';
 
-@Controller(ApiPath.Root)
+@Controller('location')
 export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 
@@ -15,9 +13,8 @@ export class LocationController {
     return [location, count];
   }
 
-  @Get(ApiPath.GetLocationName)
-  async getNearByLocation(@Param() param: GetLocationNameParamDto): Promise<LocationResponseDto> {
-    const result = await this.locationService.getLocationByName(param.name);
-    return new LocationResponseDto(result);
+  @Get(':name')
+  async getNearByLocation(@Param() param: GetLocationNameParamDto) {
+    return this.locationService.getLocationByName(param.name);
   }
 }

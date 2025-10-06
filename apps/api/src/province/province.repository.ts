@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Province } from '@waggle/entity';
 import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
+import { Province } from 'waggle-entity/dist/province/province.entity';
 
 @Injectable()
 export class ProvinceRepository {

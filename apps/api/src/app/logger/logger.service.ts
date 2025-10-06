@@ -6,6 +6,8 @@ import { config } from '../config/config.service';
 
 @Injectable()
 export class LoggerService extends ConsoleLogger {
+  private readonly needConsole: boolean = config.useConsoleApi;
+
   private readonly rotateLoggerFormat;
   private readonly rotateOptions;
 
@@ -64,22 +66,32 @@ export class LoggerService extends ConsoleLogger {
 
   log(message: string, meta?: unknown): void {
     this.getFileLogger(false).info(message, meta);
-    this.getConsoleLogger().info(message, meta);
+    if (this.needConsole) {
+      this.getConsoleLogger().info(message, meta);
+    }
   }
   warn(message: string, meta?: unknown): void {
     this.getFileLogger(false).warn(message, meta);
-    this.getConsoleLogger().warn(message, meta);
+    if (this.needConsole) {
+      this.getConsoleLogger().warn(message, meta);
+    }
   }
   debug(message: string, meta?: unknown): void {
     this.getFileLogger(false).info(message, meta);
-    this.getConsoleLogger().info(message, meta);
+    if (this.needConsole) {
+      this.getConsoleLogger().info(message, meta);
+    }
   }
   verbose(message: string, meta?: unknown): void {
     this.getFileLogger(false).info(message, meta);
-    this.getConsoleLogger().info(message, meta);
+    if (this.needConsole) {
+      this.getConsoleLogger().info(message, meta);
+    }
   }
   error(message: string, meta?: unknown): void {
     this.getFileLogger(true).error(message, meta);
-    this.getConsoleLogger().error(message, meta);
+    if (this.needConsole) {
+      this.getConsoleLogger().error(message, meta);
+    }
   }
 }
