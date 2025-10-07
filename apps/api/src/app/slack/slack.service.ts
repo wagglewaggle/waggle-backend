@@ -3,6 +3,7 @@ import { IncomingWebhook } from '@slack/webhook';
 import { replyReportForm, reviewPostReportForm } from './slack.constant';
 import { PlaceEntity } from '../../place/entity/place.entity';
 import { config } from '../config/config.service';
+import { Reply, ReviewPost } from '@waggle/entity';
 
 @Injectable()
 export class SlackService {

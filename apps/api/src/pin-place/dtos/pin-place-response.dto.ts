@@ -1,6 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { PlaceResponseDto } from '../../place/dtos/place-response.dto';
 import { PlaceEntity } from '../../place/entity/place.entity';
+import { PinPlace } from '@waggle/entity';
 
 export class PinPlaceResponseDto {
   @Exclude() private readonly _pinPlaces: PinPlace[];

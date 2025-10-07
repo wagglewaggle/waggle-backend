@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, EntityManager, FindOptionsWhere, Repository } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
+import { PinReviewPost } from '@waggle/entity';
 
 @Injectable()
 export class PinReviewPostRepository {

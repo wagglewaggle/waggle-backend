@@ -12,6 +12,7 @@ import { DataSource } from 'typeorm';
 import { INaverInformationResponse, INaverTokenResponse } from '../auth-platform.interface';
 import { UserTokenService } from '../../user-token/user-token.service';
 import { config } from '../../app/config/config.service';
+import { SnsType, UserStatus } from '@waggle/entity';
 
 @Injectable()
 export class NaverService extends BaseAuthService {

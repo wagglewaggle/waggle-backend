@@ -1,4 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
+import { Cctv } from '@waggle/entity';
 
 export class KtCctvResponseDto {
   @Exclude() private readonly _idx;

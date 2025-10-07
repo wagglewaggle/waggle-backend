@@ -12,6 +12,7 @@ import * as fs from 'fs';
 import { IAppleJwtPayload, IAppleTokenResponse } from '../auth-platform.interface';
 import ERROR_CODE from '../../app/exceptions/error-code';
 import { config } from '../../app/config/config.service';
+import { SnsType, UserStatus } from '@waggle/entity';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const AppleAuth = require('apple-auth');
 

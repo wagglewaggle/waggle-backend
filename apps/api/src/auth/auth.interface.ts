@@ -1,3 +1,5 @@
+import { SnsType } from '@waggle/entity';
+
 export interface IAuthCallbackResult {
   accessToken: string;
   refreshToken: string;

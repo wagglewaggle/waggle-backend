@@ -3,6 +3,7 @@ import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface 
 import { PlaceType } from '../app.constant';
 import ERROR_CODE from '../exceptions/error-code';
 import { ClientRequestException } from '../exceptions/request.exception';
+import { CategoryType } from '@waggle/entity';
 
 export const USERNAME_RULE = /^[가-힣a-zA-Z0-9\s]{1,9}$/;
 

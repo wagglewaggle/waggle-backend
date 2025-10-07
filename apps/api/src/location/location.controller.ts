@@ -1,6 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { GetLocationNameParamDto } from './location.dto';
 import { LocationService } from './location.service';
+import { Location } from '@waggle/entity';
 
 @Controller('location')
 export class LocationController {
