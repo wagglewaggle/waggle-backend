@@ -7,7 +7,7 @@ export class AddMissingCategory1691913002199 implements MigrationInterface {
     await queryRunner.query(`INSERT INTO category (type, ktPlaceIdx) VALUES ('강변', 33)`);
     await queryRunner.query(`INSERT INTO category (type, ktPlaceIdx) VALUES ('강변', 38)`);
     await queryRunner.query(`INSERT INTO category (type, ktPlaceIdx) VALUES ('강변', 40)`);
-    await queryRunner.query(`INSERT INTO category (type, ktPlaceIdx) VALUES ('강변', 48)`);
+    await queryRunner.query(`-- INSERT INTO category (type, ktPlaceIdx) VALUES ('강변', 48)`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {}

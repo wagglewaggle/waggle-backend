@@ -36,8 +36,8 @@ export class FixKtPlacePos1696595405787 implements MigrationInterface {
     await queryRunner.query(`UPDATE kt_place SET x = 37.5257629325131, y = 126.943147274561 WHERE idx = 82`);
     await queryRunner.query(`UPDATE kt_place SET x = 37.517948847318, y = 126.959147903665 WHERE idx = 83`);
     await queryRunner.query(`UPDATE kt_place SET x = 37.5381510562084, y = 126.92575846155 WHERE idx = 84`);
-    await queryRunner.query(`UPDATE kt_place SET x = 37.514056713371, y = 126.948178275855 WHERE idx = 85`);
-    await queryRunner.query(`UPDATE kt_place SET x = 37.5065330557593, y = 126.958950546187 WHERE idx = 86`);
+    // await queryRunner.query(`UPDATE kt_place SET x = 37.514056713371, y = 126.948178275855 WHERE idx = 85`);
+    // await queryRunner.query(`UPDATE kt_place SET x = 37.5065330557593, y = 126.958950546187 WHERE idx = 86`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {}

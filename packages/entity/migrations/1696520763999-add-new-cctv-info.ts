@@ -193,42 +193,42 @@ export class AddNewCctvInfo1696520763999 implements MigrationInterface {
     await queryRunner.query(
       `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/154.stream/playlist.m3u8', '청계2가', 3, null)`,
     );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/29.stream/playlist.m3u8', '서울역', 41, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.53:1935/live/282.stream/playlist.m3u8', '철도빌딩', 41, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.54:1935/live/327.stream/playlist.m3u8', '염천교', 41, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/257.stream/playlist.m3u8', '노량진삼거리', 44, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/215.stream/playlist.m3u8', '잠실역', 45, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/216.stream/playlist.m3u8', '올림픽공원', 45, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.53:1935/live/321.stream/playlist.m3u8', '올림픽공원남단', 45, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.53:1935/live/305.stream/playlist.m3u8', '여의도공원', 48, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.54:1935/live/1036.stream/playlist.m3u8', '여의대로 여의3 -> 신월 방향', 48, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/38.stream/playlist.m3u8', '여의공원', 48, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/34.stream/playlist.m3u8', '영등포역', 49, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/96.stream/playlist.m3u8', '영등포시장', 49, null)`,
-    );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/29.stream/playlist.m3u8', '서울역', 41, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.53:1935/live/282.stream/playlist.m3u8', '철도빌딩', 41, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.54:1935/live/327.stream/playlist.m3u8', '염천교', 41, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/257.stream/playlist.m3u8', '노량진삼거리', 44, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/215.stream/playlist.m3u8', '잠실역', 45, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/216.stream/playlist.m3u8', '올림픽공원', 45, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.53:1935/live/321.stream/playlist.m3u8', '올림픽공원남단', 45, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.53:1935/live/305.stream/playlist.m3u8', '여의도공원', 48, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.54:1935/live/1036.stream/playlist.m3u8', '여의대로 여의3 -> 신월 방향', 48, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/38.stream/playlist.m3u8', '여의공원', 48, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/34.stream/playlist.m3u8', '영등포역', 49, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/96.stream/playlist.m3u8', '영등포시장', 49, null)`,
+    // );
     await queryRunner.query(
       `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/86.stream/playlist.m3u8', '양화대교남단', 53, null)`,
     );
@@ -346,12 +346,12 @@ export class AddNewCctvInfo1696520763999 implements MigrationInterface {
     await queryRunner.query(
       `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/26.stream/playlist.m3u8', '한강대교북단', 83, null)`,
     );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/257.stream/playlist.m3u8', '노량진삼거리', 85, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/80.stream/playlist.m3u8', '원불교', 86, null)`,
-    );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/257.stream/playlist.m3u8', '노량진삼거리', 85, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.51:1935/live/80.stream/playlist.m3u8', '원불교', 86, null)`,
+    // );
     await queryRunner.query(
       `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('http://210.179.218.52:1935/live/214.stream/playlist.m3u8', '종합운동장', 40, null)`,
     );
@@ -410,18 +410,18 @@ export class AddNewCctvInfo1696520763999 implements MigrationInterface {
     await queryRunner.query(
       `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://www.youtube.com/watch?v=4NZtsD8bieU', '남산서울타워', 30, null)`,
     );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://www.youtube.com/live/w28swMa-cIM?si=eS5A0Y85TBGpWWiY', '서울역광장', 41, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://www.youtube.com/live/V4xCIzkeIuE?si=-8JWOm4aVor-Butr', '석촌호수', 45, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://www.youtube.com/live/ydCsp_vOe_8?si=6VBWImcVaclWKBG_', '롯데월드타워', 45, null)`,
-    );
-    await queryRunner.query(
-      `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://md.kbs.co.kr/special/cctvShare?cctvId=9961', '영등포 여의도', 48, null)`,
-    );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://www.youtube.com/live/w28swMa-cIM?si=eS5A0Y85TBGpWWiY', '서울역광장', 41, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://www.youtube.com/live/V4xCIzkeIuE?si=-8JWOm4aVor-Butr', '석촌호수', 45, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://www.youtube.com/live/ydCsp_vOe_8?si=6VBWImcVaclWKBG_', '롯데월드타워', 45, null)`,
+    // );
+    // await queryRunner.query(
+    //   `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://md.kbs.co.kr/special/cctvShare?cctvId=9961', '영등포 여의도', 48, null)`,
+    // );
     await queryRunner.query(
       `insert into cctv (src, cctvname, ktPlaceIdx, sktPlaceIdx) values ('https://md.kbs.co.kr/special/cctvShare?cctvId=9961', '영등포 여의도', 52, null)`,
     );
