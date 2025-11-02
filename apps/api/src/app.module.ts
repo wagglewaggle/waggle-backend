@@ -13,6 +13,7 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './app/interceptors/logging.interceptor';
 import { AllExceptionFilter } from './app/filters/all-exception.filter';
 import { CategoryTypeModule } from './category-type/category-type.module';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 export const TypeOrmRootModule = TypeOrmModule.forRootAsync({
   useClass: MysqlConfigService,
@@ -20,6 +21,7 @@ export const TypeOrmRootModule = TypeOrmModule.forRootAsync({
 
 @Module({
   imports: [
+    PrometheusModule.register(),
     TypeOrmRootModule,
     LoggerModule,
     ProvinceModule,
