@@ -24,6 +24,17 @@ services:
     networks:
       - monitoring-net
 
+  mysqld-exporter:
+    image: prom/mysqld-exporter:v0.18.0
+    container_name: mysqld-exporter
+    ports:
+      - "9104:9104"
+    command:
+      - "--mysqld.username=exporter:exporter1234"
+      - "--mysqld.address=host.docker.internal:13306"
+    networks:
+      - monitoring-net
+
 networks:
   monitoring-net:
     driver: bridge
