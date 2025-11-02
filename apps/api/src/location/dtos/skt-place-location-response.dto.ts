@@ -32,7 +32,10 @@ export class SktPlaceLocationResponseDto {
   }
 
   @Expose()
-  get population(): SktPopulationResponseDto {
+  get population(): SktPopulationResponseDto | null {
+    if (!this._population) {
+      return null;
+    }
     return new SktPopulationResponseDto(this._population);
   }
 }
