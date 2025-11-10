@@ -4,6 +4,7 @@ import { LoggerService } from '../logger/logger.service';
 import { IRequestAugmented } from '../app.interface';
 import { getClientIp } from 'request-ip';
 import { ILoggingObject } from './logging.constant';
+import { PrometheusController } from '@willsoto/nestjs-prometheus';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -36,6 +37,10 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(() => {
+        if (context.getClass().name === PrometheusController.name) {
+          return;
+        }
+
         this.logObj.success = true;
 
         this.calculateElapsedTime();

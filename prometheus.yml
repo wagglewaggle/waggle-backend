@@ -1,14 +1,11 @@
 global:
-  scrape_interval: 15s # 15초마다 메트릭을 수집
+  scrape_interval: 15s
 
 scrape_configs:
   - job_name: 'waggle-api'
-    metrics_path: '/api/metrics' # app.module.ts에서 설정한 경로
+    metrics_path: '/api/metrics'
     static_configs:
       - targets: ['host.docker.internal:3000']
-        # host.docker.internal은 Docker 컨테이너에서 호스트 머신(local)을 가리키는 특별한 DNS 이름입니다.
-        # 로컬에서 실행 중인 NestJS 앱(3000 포트)을 의미합니다.
-        # 만약 API 서버도 Docker로 실행한다면, 해당 컨테이너의 서비스 이름을 적어주면 됩니다. (예: 'api:3000')
 
   - job_name: 'mysql'
     static_configs:
