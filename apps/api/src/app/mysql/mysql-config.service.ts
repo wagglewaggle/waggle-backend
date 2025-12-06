@@ -15,6 +15,9 @@ export class MysqlConfigService implements TypeOrmOptionsFactory {
       logging: false,
       synchronize: false,
       keepConnectionAlive: true,
+      extra: {
+        connectionLimit: config.mysqlConnectionPool,
+      },
       // autoLoadEntities: true,
     };
   }

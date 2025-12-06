@@ -27,6 +27,7 @@ export class ConfigService {
       MYSQL_DATABASE: Joi.string().required(),
       MYSQL_USERNAME: Joi.string().required(),
       MYSQL_PASSWORD: Joi.string(),
+      MYSQL_CONNECTION_POOL: Joi.number().required(),
     });
 
     const { error, value: validatedEnvConfig } = envVarsSchema.validate(envConfig);
@@ -70,6 +71,10 @@ export class ConfigService {
 
   get mysqlPassword(): string {
     return this.envConfig.MYSQL_PASSWORD;
+  }
+
+  get mysqlConnectionPool(): number {
+    return parseInt(this.envConfig.MYSQL_CONNECTION_POOL, 10);
   }
 }
 

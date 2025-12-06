@@ -1,5 +1,7 @@
 version: '3.8'
 
+name: waggle-monitoring
+
 services:
   prometheus:
     image: prom/prometheus:v3.7.3
