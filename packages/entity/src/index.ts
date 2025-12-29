@@ -1,6 +1,7 @@
 export * from './category';
 export * from './category-type';
 export * from './cctv';
+export * from './job-log';
 export * from './kt-accident';
 export * from './kt-place';
 export * from './kt-population';

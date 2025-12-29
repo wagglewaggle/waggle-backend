@@ -18,6 +18,7 @@ import { KtRoadTrafficEntity } from '../kt/kt-road-traffic/entity/kt-road-traffi
 import { CityDataPopulation, KtCityData } from './city-data.interface';
 import { KtApi } from './job.constant';
 import { KtPlace } from '@waggle/entity';
+import { JobLogService } from './job-log/job-log.service';
 
 @Injectable()
 export class KtJob extends BaseJob {
@@ -25,18 +26,21 @@ export class KtJob extends BaseJob {
   jobType = JobType.KT;
   cronTime = config.ktCronTime;
   private readonly url: string;
+  private readonly WORKER_ID: string;
 
   constructor(
     private readonly ktPlaceService: KtPlaceService,
     private readonly ktPopulationService: KtPopulationService,
     private readonly ktAccidentService: KtAccidentService,
     private readonly ktRoadTrafficService: KtRoadTrafficService,
+    private readonly jobLogService: JobLogService,
     private readonly dataSource: DataSource,
     public readonly loggerService: LoggerService,
     public readonly sentryService: SentryService,
   ) {
     super(loggerService, sentryService);
     this.url = `${KtApi.HOST}/${config.ktApiKey}/${KtApi.ENDPOINT}`;
+    this.WORKER_ID = `${this.jobName}-${Math.floor(Math.random() * 1000)}`;
   }
 
   async run(): Promise<Record<string, any>> {
@@ -45,6 +49,8 @@ export class KtJob extends BaseJob {
       const places = await this.ktPlaceService.getActivatedPlaces();
 
       for await (const place of places) {
+        const start = new Date();
+
         const connection = this.dataSource;
         const queryRunner: QueryRunner = connection.createQueryRunner();
         const manager = queryRunner.manager;
@@ -70,8 +76,21 @@ export class KtJob extends BaseJob {
 
           await queryRunner.commitTransaction();
           this.loggerService.log(`[${place.name}(${place.idx})] successfully updated`, this.jobName);
+
+          await this.jobLogService.add(
+            this.WORKER_ID,
+            `[${place.name}(${place.idx})] successfully updated`,
+            (new Date().getTime() - start.getTime()) / 1000,
+          );
         } catch (e) {
           this.loggerService.error(`[${place.name}(${place.idx})] update failed`, this.jobName);
+
+          await this.jobLogService.add(
+            this.WORKER_ID,
+            `[${place.name}(${place.idx})] update failed`,
+            (new Date().getTime() - start.getTime()) / 1000,
+          );
+
           if (queryRunner.isTransactionActive) {
             await queryRunner.rollbackTransaction();
           }
