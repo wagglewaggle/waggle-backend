@@ -1,5 +1,4 @@
 import { KtAccident, KtPlace } from '@waggle/entity';
-import { IAccidentControlStatus } from '../../../job/city-data.interface';
 
 export class KtAccidentEntity extends KtAccident {
   readonly type: string;
@@ -9,7 +8,7 @@ export class KtAccidentEntity extends KtAccident {
   readonly y: number;
   readonly place: KtPlace;
 
-  constructor(place: KtPlace, accident: IAccidentControlStatus) {
+  constructor(place: KtPlace, accident: any) {
     super();
     this.type = accident.ACDNT_TYPE;
     this.dtype = accident.ACDNT_DTYPE;
