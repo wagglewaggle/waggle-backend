@@ -9,37 +9,38 @@ import { KtAccidentService } from '../kt/kt-accident/kt-accident.service';
 import { KtRoadTrafficService } from '../kt/kt-road-traffic/kt-road-traffic.service';
 import { DataSource, EntityManager, QueryRunner } from 'typeorm';
 import { KtAccidentEntity } from '../kt/kt-accident/entity/kt-accident.entity';
-import { XMLParser } from 'fast-xml-parser';
 import { SchedulerError } from '../app/error/scheduler.error';
 import { ErrorLevel } from '../app/error/error.constant';
 import Axios from 'axios';
 import { config } from '../app/config/config.service';
 import { KtPopulationEntity } from '../kt/kt-population/entity/kt-population.entity';
 import { KtRoadTrafficEntity } from '../kt/kt-road-traffic/entity/kt-road-traffic.entity';
-import { IAccidentObject, IKtCityData } from './city-data.interface';
+import { CityDataPopulation, KtCityData } from './city-data.interface';
 import { KtApi } from './job.constant';
 import { KtPlace } from '@waggle/entity';
+import { JobLogService } from './job-log/job-log.service';
 
 @Injectable()
 export class KtJob extends BaseJob {
   jobName = 'KT-POPULATION-JOB';
   jobType = JobType.KT;
   cronTime = config.ktCronTime;
-  private readonly xmlParser: XMLParser;
   private readonly url: string;
+  private readonly WORKER_ID: string;
 
   constructor(
     private readonly ktPlaceService: KtPlaceService,
     private readonly ktPopulationService: KtPopulationService,
     private readonly ktAccidentService: KtAccidentService,
     private readonly ktRoadTrafficService: KtRoadTrafficService,
+    private readonly jobLogService: JobLogService,
     private readonly dataSource: DataSource,
     public readonly loggerService: LoggerService,
     public readonly sentryService: SentryService,
   ) {
     super(loggerService, sentryService);
-    this.xmlParser = new XMLParser();
     this.url = `${KtApi.HOST}/${config.ktApiKey}/${KtApi.ENDPOINT}`;
+    this.WORKER_ID = `${this.jobName}-${Math.floor(Math.random() * 1000)}`;
   }
 
   async run(): Promise<Record<string, any>> {
@@ -48,36 +49,48 @@ export class KtJob extends BaseJob {
       const places = await this.ktPlaceService.getActivatedPlaces();
 
       for await (const place of places) {
+        const start = new Date();
+
         const connection = this.dataSource;
         const queryRunner: QueryRunner = connection.createQueryRunner();
         const manager = queryRunner.manager;
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-          const { data } = await Axios.get(`${this.url}/${place.name}`);
-          const result: IKtCityData = await this.xmlParser.parse(data);
+          const { data } = await Axios.get<KtCityData>(`${this.url}/${place.name}`);
 
-          if (result['SeoulRtd.citydata'] === undefined) {
-            this.loggerService.error(`undefined citydata : ${place.name}(${place.idx})`, this.jobName);
+          if (data.RESULT['RESULT.CODE'] !== 'INFO-000') {
+            this.loggerService.error(`undefined city data : ${place.name}(${place.idx})`, this.jobName);
             continue;
           }
 
-          await this.updateKtAccident(place, result['SeoulRtd.citydata'].CITYDATA.ACDNT_CNTRL_STTS, manager);
-          await this.ktPopulationService.addKtPopulation(
-            new KtPopulationEntity(place, result['SeoulRtd.citydata'].CITYDATA.LIVE_PPLTN_STTS, new Date()),
-            manager,
-          );
+          // await this.updateKtAccident(place, result['SeoulRtd.citydata'].CITYDATA.ACDNT_CNTRL_STTS, manager);
+          const populationEntity = new KtPopulationEntity(place, data['SeoulRtd.citydata_ppltn'][0]);
+          await this.ktPopulationService.upsertPopulation(populationEntity, manager);
 
           /** roadTraffic이 undefined일 경우에 대한 방어로직 */
-          const roadTraffic = result['SeoulRtd.citydata'].CITYDATA.ROAD_TRAFFIC_STTS.AVG_ROAD_DATA;
-          if (roadTraffic) {
-            await this.ktRoadTrafficService.addKtRoadTraffic(new KtRoadTrafficEntity(place, roadTraffic), manager);
-          }
+          // const roadTraffic = result['SeoulRtd.citydata'].CITYDATA.ROAD_TRAFFIC_STTS.AVG_ROAD_DATA;
+          // if (roadTraffic) {
+          //   await this.ktRoadTrafficService.addKtRoadTraffic(new KtRoadTrafficEntity(place, roadTraffic), manager);
+          // }
 
           await queryRunner.commitTransaction();
           this.loggerService.log(`[${place.name}(${place.idx})] successfully updated`, this.jobName);
+
+          await this.jobLogService.add(
+            this.WORKER_ID,
+            `[${place.name}(${place.idx})] successfully updated`,
+            (new Date().getTime() - start.getTime()) / 1000,
+          );
         } catch (e) {
           this.loggerService.error(`[${place.name}(${place.idx})] update failed`, this.jobName);
+
+          await this.jobLogService.add(
+            this.WORKER_ID,
+            `[${place.name}(${place.idx})] update failed`,
+            (new Date().getTime() - start.getTime()) / 1000,
+          );
+
           if (queryRunner.isTransactionActive) {
             await queryRunner.rollbackTransaction();
           }
@@ -101,19 +114,18 @@ export class KtJob extends BaseJob {
     }
   }
 
-  private async updateKtAccident(place: KtPlace, accident: string | IAccidentObject, manager?: EntityManager) {
+  private async updateKtAccident(place: KtPlace, accident: CityDataPopulation, manager?: EntityManager) {
     try {
       // 새로운 로그가 쌓이든 안 쌓이든 항상 전처리를 하도록 한다.
-      await this.preprocessKtAccident(place, manager);
-
-      if (typeof accident !== 'string') {
-        const { ACDNT_CNTRL_STTS } = accident;
-        if (Array.isArray(ACDNT_CNTRL_STTS)) {
-          await Promise.all(ACDNT_CNTRL_STTS.map((accident) => this.ktAccidentService.addKtAccident(new KtAccidentEntity(place, accident), manager)));
-        } else {
-          await this.ktAccidentService.addKtAccident(new KtAccidentEntity(place, ACDNT_CNTRL_STTS), manager);
-        }
-      }
+      // await this.preprocessKtAccident(place, manager);
+      // if (typeof accident !== 'string') {
+      //   const { ACDNT_CNTRL_STTS } = accident;
+      //   if (Array.isArray(ACDNT_CNTRL_STTS)) {
+      //     await Promise.all(ACDNT_CNTRL_STTS.map((accident) => this.ktAccidentService.addKtAccident(new KtAccidentEntity(place, accident), manager)));
+      //   } else {
+      //     await this.ktAccidentService.addKtAccident(new KtAccidentEntity(place, ACDNT_CNTRL_STTS), manager);
+      //   }
+      // }
     } catch (e) {
       throw new SchedulerError(`${place.idx} : ${e}`, ErrorLevel.Normal);
     }

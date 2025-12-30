@@ -1,4 +1,4 @@
-export interface KtCityData {
+export interface PlacePopulationApiData {
   'SeoulRtd.citydata_ppltn': CityDataPopulation[];
   RESULT: {
     'RESULT.CODE': string;
@@ -36,24 +36,4 @@ export interface CityDataPredictionPopulation {
   FCST_CONGEST_LVL: string;
   FCST_PPLTN_MIN: string;
   FCST_PPLTN_MAX: string;
-}
-
-export interface ISktCityData {
-  status: {
-    code: string;
-    message: string;
-    totalCount: number;
-  };
-  contents: {
-    poiId: string;
-    poiName: string;
-    rltm: ISktRealTimeCongestion[];
-  };
-}
-
-export interface ISktRealTimeCongestion {
-  type: number;
-  congestion: number;
-  congestionLevel: number;
-  datetime: string;
 }

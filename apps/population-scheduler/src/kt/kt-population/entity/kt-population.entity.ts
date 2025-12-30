@@ -1,5 +1,5 @@
 import { KtPopulation, KtPlace, KtPopulationLevel } from '@waggle/entity';
-import { ILivePopulationStatus } from '../../../job/city-data.interface';
+import { CityDataPopulation } from '../../../job/city-data.interface';
 
 export class KtPopulationEntity extends KtPopulation {
   readonly idx: number;
@@ -20,11 +20,11 @@ export class KtPopulationEntity extends KtPopulation {
   readonly nonResident: number;
   readonly updatedDate: Date;
 
-  constructor(place: KtPlace, { LIVE_PPLTN_STTS }: ILivePopulationStatus, updatedDate: Date) {
+  constructor(place: KtPlace, cityData: CityDataPopulation) {
     super();
-    this.idx = place.idx;
     this.place = place;
-    switch (LIVE_PPLTN_STTS.AREA_CONGEST_LVL) {
+
+    switch (cityData.AREA_CONGEST_LVL) {
       case '여유':
         this.level = KtPopulationLevel.Relaxation;
         break;
@@ -39,21 +39,20 @@ export class KtPopulationEntity extends KtPopulation {
         this.level = KtPopulationLevel.VeryCrowded;
         break;
       default:
-        throw new Error(`Area Congest Level Error : ${LIVE_PPLTN_STTS.AREA_CONGEST_LVL}`);
+        throw new Error(`Area Congest Level Error : ${cityData.AREA_CONGEST_LVL}`);
     }
-    this.message = LIVE_PPLTN_STTS.AREA_CONGEST_MSG;
-    this.male = LIVE_PPLTN_STTS.MALE_PPLTN_RATE;
-    this.female = LIVE_PPLTN_STTS.FEMALE_PPLTN_RATE;
-    this.zeroGen = LIVE_PPLTN_STTS.PPLTN_RATE_0;
-    this.teenager = LIVE_PPLTN_STTS.PPLTN_RATE_10;
-    this.twenties = LIVE_PPLTN_STTS.PPLTN_RATE_20;
-    this.thirties = LIVE_PPLTN_STTS.PPLTN_RATE_30;
-    this.forties = LIVE_PPLTN_STTS.PPLTN_RATE_40;
-    this.fifties = LIVE_PPLTN_STTS.PPLTN_RATE_50;
-    this.sixties = LIVE_PPLTN_STTS.PPLTN_RATE_60;
-    this.seventies = LIVE_PPLTN_STTS.PPLTN_RATE_70;
-    this.resident = LIVE_PPLTN_STTS.RESNT_PPLTN_RATE;
-    this.nonResident = LIVE_PPLTN_STTS.NON_RESNT_PPLTN_RATE;
-    this.updatedDate = updatedDate; // 이전 데이터에서 변경된 점이 없으면 updatedDate가 갱신되지 않기 때문에 js date로 수정한다
+    this.message = cityData.AREA_CONGEST_MSG;
+    this.male = Number(cityData.MALE_PPLTN_RATE);
+    this.female = Number(cityData.FEMALE_PPLTN_RATE);
+    this.zeroGen = Number(cityData.PPLTN_RATE_0);
+    this.teenager = Number(cityData.PPLTN_RATE_10);
+    this.twenties = Number(cityData.PPLTN_RATE_20);
+    this.thirties = Number(cityData.PPLTN_RATE_30);
+    this.forties = Number(cityData.PPLTN_RATE_40);
+    this.fifties = Number(cityData.PPLTN_RATE_50);
+    this.sixties = Number(cityData.PPLTN_RATE_60);
+    this.seventies = Number(cityData.PPLTN_RATE_70);
+    this.resident = Number(cityData.RESNT_PPLTN_RATE);
+    this.nonResident = Number(cityData.NON_RESNT_PPLTN_RATE);
   }
 }

@@ -1,5 +1,4 @@
 import { KtRoadTraffic, KtPlace } from '@waggle/entity';
-import { IRoadTraffic } from '../../../job/city-data.interface';
 
 export class KtRoadTrafficEntity extends KtRoadTraffic {
   readonly idx: number;
@@ -8,7 +7,7 @@ export class KtRoadTrafficEntity extends KtRoadTraffic {
   readonly avgSpeed: number;
   readonly ktPlace: KtPlace;
 
-  constructor(place: KtPlace, roadTraffic: IRoadTraffic) {
+  constructor(place: KtPlace, roadTraffic: any) {
     super();
     this.idx = place.idx;
     this.info = roadTraffic.ROAD_MSG;

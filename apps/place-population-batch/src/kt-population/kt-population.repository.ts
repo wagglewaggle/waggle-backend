@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { KtPopulation } from '@waggle/entity';
 import { EntityManager, InsertResult, Repository } from 'typeorm';
-import { KtPopulationEntity } from './entity/kt-population.entity';
 
 @Injectable()
 export class KtPopulationRepository {
@@ -11,14 +10,7 @@ export class KtPopulationRepository {
     private readonly repository: Repository<KtPopulation>,
   ) {}
 
-  async addKtPopulation(ktPopulation: KtPopulation, manager?: EntityManager): Promise<KtPopulation> {
-    if (manager) {
-      return manager.save(KtPopulation, ktPopulation);
-    }
-    return this.repository.save(ktPopulation);
-  }
-
-  async upsert(population: KtPopulationEntity, manager: EntityManager): Promise<InsertResult> {
+  async upsert(population: KtPopulation, manager?: EntityManager): Promise<InsertResult> {
     const query =
       'INSERT INTO kt_population' +
       '(placeIdx, level, message, ' +
@@ -47,6 +39,9 @@ export class KtPopulationRepository {
       population.nonResident,
     ];
 
-    return manager.query(query, values);
+    if (manager) {
+      return manager.query(query, values);
+    }
+    return this.repository.query(query, values);
   }
 }

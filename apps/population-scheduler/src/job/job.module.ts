@@ -9,9 +9,11 @@ import { KtJob } from './kt.job';
 import { SktJob } from './skt.job';
 import { SktPlaceModule } from '../skt/skt-place/skt-place.module';
 import { SktPopulationModule } from '../skt/skt-population/skt-population.module';
+import { JobLogModule } from './job-log/job-log.module';
 
 @Module({
   imports: [
+    JobLogModule,
     LoggerModule,
     SentryModule,
     KtPlaceModule,

@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeepPartial, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { KtPlace } from '../kt-place/kt-place.entity';
 import { KtPopulationLevel } from './kt-population.constant';
 
@@ -58,4 +58,25 @@ export class KtPopulation {
 
   @UpdateDateColumn()
   updatedDate: Date;
+
+  static createInstance(obj: DeepPartial<KtPopulation>): KtPopulation {
+    const instance = new KtPopulation();
+    return Object.assign(instance, obj);
+  }
+
+  static getPopulationLevelByApiResult(areaCongestLevel: string) {
+    switch (areaCongestLevel) {
+      case '여유':
+        return KtPopulationLevel.Relaxation;
+      case '보통':
+        return KtPopulationLevel.Normal;
+      case '약간 붐빔':
+      case '붐빔':
+        return KtPopulationLevel.Crowded;
+      case '매우 붐빔':
+        return KtPopulationLevel.VeryCrowded;
+      default:
+        throw new Error(`Area Congest Level Error : ${areaCongestLevel}`);
+    }
+  }
 }
