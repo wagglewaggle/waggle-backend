@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeepPartial, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class JobLog {
@@ -16,4 +16,9 @@ export class JobLog {
 
   @CreateDateColumn()
   createdDate: Date;
+
+  static createInstance(obj: DeepPartial<JobLog>): JobLog {
+    const instance = new JobLog();
+    return Object.assign(instance, obj);
+  }
 }
