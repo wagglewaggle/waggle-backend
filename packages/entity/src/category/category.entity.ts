@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { KtPlace } from '../kt-place/kt-place.entity';
 import { SktPlace } from '../skt-place/skt-place.entity';
 import { CategoryType } from '../category-type/category-type.entity';
+import { Place } from '../place/place.entity';
 
 @Entity()
 export class Category {
@@ -10,6 +11,9 @@ export class Category {
 
   @ManyToOne(() => CategoryType, (categoryType) => categoryType.categories)
   type: CategoryType;
+
+  @ManyToOne(() => Place, (place) => place.categories)
+  place: Place;
 
   @ManyToOne(() => KtPlace, (ktPlace) => ktPlace.categories)
   ktPlace: KtPlace;
