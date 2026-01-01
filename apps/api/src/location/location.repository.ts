@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { KtPlace, SktPlace, KtPlaceStatus, SktPlaceStatus, Location } from '@waggle/entity';
+import { Location, Place, PlaceStatus } from '@waggle/entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 
 @Injectable()
@@ -19,25 +19,17 @@ export class LocationRepository {
     return this.repository.findOne(options);
   }
 
-  async getNearByLocation(name: string, duplicatePlace?: KtPlace | SktPlace): Promise<Location> {
+  async getNearByLocation(name: string, duplicatePlace?: Place): Promise<Location> {
     const queryBuilder = this.repository
       .createQueryBuilder('location')
-      .leftJoinAndSelect('location.ktPlaces', 'ktPlace', 'ktPlace.status = :ktPlaceStatus', { ktPlaceStatus: KtPlaceStatus.Activated })
-      .leftJoinAndSelect('ktPlace.population', 'ktPlacePopulation')
-      .leftJoinAndSelect('ktPlace.categories', 'ktPlaceCategories')
-      .leftJoinAndSelect('ktPlaceCategories.type', 'ktPlaceCategoryType')
-      .leftJoinAndSelect('location.sktPlaces', 'sktPlace', 'sktPlace.status = :sktPlaceStatus', { sktPlaceStatus: SktPlaceStatus.Activated })
-      .leftJoinAndSelect('sktPlace.population', 'sktPlacePopulation')
-      .leftJoinAndSelect('sktPlace.categories', 'sktPlaceCategories')
-      .leftJoinAndSelect('sktPlaceCategories.type', 'sktPlaceCategoryType')
+      .leftJoinAndSelect('location.places', 'place', 'place.status = :placeStatus', { placeStatus: PlaceStatus.Activated })
+      .leftJoinAndSelect('place.population', 'placePopulation')
+      .leftJoinAndSelect('place.categories', 'placeCategories')
+      .leftJoinAndSelect('placeCategories.type', 'placeCategoryType')
       .where('location.name = :name', { name });
 
     if (duplicatePlace) {
-      if (duplicatePlace instanceof KtPlace) {
-        queryBuilder.andWhere('ktPlace.idx != :idx', { idx: duplicatePlace.idx });
-      } else {
-        queryBuilder.andWhere('sktPlace.idx != :idx', { idx: duplicatePlace.idx });
-      }
+      queryBuilder.andWhere('place.idx != :idx', { idx: duplicatePlace.idx });
     }
 
     const result = await queryBuilder.getOne();

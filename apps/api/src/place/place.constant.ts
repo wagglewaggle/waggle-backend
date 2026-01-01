@@ -1,4 +1,4 @@
 export enum ApiPath {
-  Root = 'kt-place',
+  Root = 'place',
   GetPlaceIdx = ':idx',
 }

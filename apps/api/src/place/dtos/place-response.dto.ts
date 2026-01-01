@@ -1,25 +1,25 @@
 import { Exclude, Expose } from 'class-transformer';
-import { KtPopulationResponseDto } from './kt-population-response.dto';
-import { KtAccidentResponseDto } from './kt-accident-response.dto';
 import { CategoryTypeResponseDto } from '../../category/dtos/category-type-response.dto';
 import { CctvResponseDto } from '../../cctv/dto/cctv-response.dto';
-import { KtRoadTrafficResponseDto } from './kt-road-traffic-response.dto';
 import { LocationResponseDto } from '../../location/dtos/location-response.dto';
-import { Category, KtPopulation, KtAccident, Cctv, KtRoadTraffic, KtPlace, Location } from '@waggle/entity';
+import { Category, Cctv, Place, PlaceAccident, PlacePopulation, PlaceRoadTraffic, Location } from '@waggle/entity';
+import { PlacePopulationResponseDto } from './place-population-response.dto';
+import { PlaceAccidentResponseDto } from './place-accident-response.dto';
+import { PlaceRoadTrafficResponseDto } from './place-road-traffic-response.dto';
 
-export class KtPlaceResponseDto {
+export class PlaceResponseDto {
   @Exclude() private readonly _idx: number;
   @Exclude() private readonly _name: string;
   @Exclude() private readonly _x: number;
   @Exclude() private readonly _y: number;
   @Exclude() private readonly _categories: Category[] | undefined;
-  @Exclude() private readonly _population: KtPopulation | undefined;
-  @Exclude() private readonly _accidents: KtAccident[] | undefined;
+  @Exclude() private readonly _population: PlacePopulation | undefined;
+  @Exclude() private readonly _accidents: PlaceAccident[] | undefined;
   @Exclude() private readonly _cctvs: Cctv[] | undefined;
-  @Exclude() private readonly _roadTraffic: KtRoadTraffic | undefined;
+  @Exclude() private readonly _roadTraffic: PlaceRoadTraffic | undefined;
   @Exclude() private readonly _location: Location | undefined;
 
-  constructor(place: KtPlace, location?: Location) {
+  constructor(place: Place, location?: Location) {
     this._idx = place.idx;
     this._name = place.name;
     this._x = place.x;
@@ -28,7 +28,7 @@ export class KtPlaceResponseDto {
     this._population = place.population;
     this._accidents = place.accidents;
     this._cctvs = place.cctvs;
-    this._roadTraffic = place.ktRoadTraffic;
+    this._roadTraffic = place.roadTraffic;
     this._location = location;
   }
 
@@ -61,19 +61,19 @@ export class KtPlaceResponseDto {
   }
 
   @Expose()
-  get population(): KtPopulationResponseDto | undefined {
+  get population(): PlacePopulationResponseDto | undefined {
     if (!this._population) {
       return undefined;
     }
-    return new KtPopulationResponseDto(this._population);
+    return new PlacePopulationResponseDto(this._population);
   }
 
   @Expose()
-  get accidents(): KtAccidentResponseDto[] | undefined {
+  get accidents(): PlaceAccidentResponseDto[] | undefined {
     if (!this._accidents) {
       return undefined;
     }
-    return this._accidents.map((accident) => new KtAccidentResponseDto(accident));
+    return this._accidents.map((accident) => new PlaceAccidentResponseDto(accident));
   }
 
   @Expose()
@@ -85,11 +85,11 @@ export class KtPlaceResponseDto {
   }
 
   @Expose()
-  get roadTraffic(): KtRoadTrafficResponseDto | undefined {
+  get roadTraffic(): PlaceRoadTrafficResponseDto | undefined {
     if (!this._roadTraffic) {
       return undefined;
     }
-    return new KtRoadTrafficResponseDto(this._roadTraffic);
+    return new PlaceRoadTrafficResponseDto(this._roadTraffic);
   }
 
   @Expose()

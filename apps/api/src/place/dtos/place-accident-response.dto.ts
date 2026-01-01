@@ -1,18 +1,18 @@
-import { KtAccident, KtPlace } from '@waggle/entity';
+import { Place, PlaceAccident } from '@waggle/entity';
 import { Exclude, Expose } from 'class-transformer';
 
-export class KtAccidentResponseDto {
+export class PlaceAccidentResponseDto {
   @Exclude() private readonly _idx: number;
   @Exclude() private readonly _type: string;
   @Exclude() private readonly _dtype: string;
   @Exclude() private readonly _info: string;
   @Exclude() private readonly _x: number;
   @Exclude() private readonly _y: number;
-  @Exclude() private readonly _place: KtPlace;
+  @Exclude() private readonly _place: Place;
   @Exclude() private readonly _createdDate: Date;
   @Exclude() private readonly _updatedDate: Date;
 
-  constructor(accident: KtAccident) {
+  constructor(accident: PlaceAccident) {
     this._idx = accident.idx;
     this._type = accident.type;
     this._dtype = accident.dtype;

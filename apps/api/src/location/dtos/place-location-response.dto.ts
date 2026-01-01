@@ -1,15 +1,15 @@
 import { Exclude, Expose } from 'class-transformer';
 import { CategoryTypeResponseDto } from '../../category/dtos/category-type-response.dto';
-import { KtPopulationResponseDto } from '../../kt-place/dtos/kt-population-response.dto';
-import { Category, KtPopulation, KtPlace } from '@waggle/entity';
+import { Category, Place, PlacePopulation } from '@waggle/entity';
+import { PlacePopulationResponseDto } from '../../place/dtos/place-population-response.dto';
 
-export class KtPlaceLocationResponseDto {
+export class PlaceLocationResponseDto {
   @Exclude() private readonly _idx: number;
   @Exclude() private readonly _name: string;
   @Exclude() private readonly _categories: Category[];
-  @Exclude() private readonly _population?: KtPopulation;
+  @Exclude() private readonly _population?: PlacePopulation;
 
-  constructor(place: KtPlace) {
+  constructor(place: Place) {
     this._idx = place.idx;
     this._name = place.name;
     this._categories = place.categories;
@@ -32,9 +32,9 @@ export class KtPlaceLocationResponseDto {
   }
 
   @Expose()
-  get population(): KtPopulationResponseDto | null {
+  get population(): PlacePopulationResponseDto | null {
     if (this._population) {
-      return new KtPopulationResponseDto(this._population);
+      return new PlacePopulationResponseDto(this._population);
     }
     return null;
   }

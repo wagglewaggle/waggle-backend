@@ -1,9 +1,9 @@
-import { KtPopulation, KtPopulationLevel } from '@waggle/entity';
+import { PlacePopulation, PlacePopulationLevel } from '@waggle/entity';
 import { Exclude, Expose } from 'class-transformer';
 
-export class KtPopulationResponseDto {
+export class PlacePopulationResponseDto {
   @Exclude() private readonly _idx: number;
-  @Exclude() private readonly _level: KtPopulationLevel;
+  @Exclude() private readonly _level: PlacePopulationLevel;
   @Exclude() private readonly _message: string;
   @Exclude() private readonly _male: number;
   @Exclude() private readonly _female: number;
@@ -20,7 +20,7 @@ export class KtPopulationResponseDto {
   @Exclude() private readonly _createdDate: Date;
   @Exclude() private readonly _updatedDate: Date;
 
-  constructor(population: KtPopulation) {
+  constructor(population: PlacePopulation) {
     this._idx = population.idx;
     this._level = population.level;
     this._message = population.message;
@@ -46,7 +46,7 @@ export class KtPopulationResponseDto {
   }
 
   @Expose()
-  get level(): KtPopulationLevel {
+  get level(): PlacePopulationLevel {
     return this._level;
   }
 

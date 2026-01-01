@@ -1,19 +1,19 @@
-import { KtPlace, KtRoadTraffic } from '@waggle/entity';
+import { Place, PlaceRoadTraffic } from '@waggle/entity';
 import { Exclude, Expose } from 'class-transformer';
 
-export class KtRoadTrafficResponseDto {
+export class PlaceRoadTrafficResponseDto {
   @Exclude() private readonly _idx: number;
   @Exclude() private readonly _info: string;
   @Exclude() private readonly _type: string;
   @Exclude() private readonly _avgSpeed: number;
-  @Exclude() private readonly _ktPlace: KtPlace;
+  @Exclude() private readonly _place: Place;
 
-  constructor(roadTraffic: KtRoadTraffic) {
+  constructor(roadTraffic: PlaceRoadTraffic) {
     this._idx = roadTraffic.idx;
     this._info = roadTraffic.info;
     this._type = roadTraffic.type;
     this._avgSpeed = roadTraffic.avgSpeed;
-    this._ktPlace = roadTraffic.ktPlace;
+    this._place = roadTraffic.place;
   }
 
   @Expose()
