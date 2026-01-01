@@ -9,9 +9,9 @@ import {
 import Axios from 'axios';
 import { config } from '../../app/config/config.service';
 import { CityDataPopulation, PlacePopulationApiData } from './place-population.interface';
-import { KtPopulationService } from '../../kt-population/kt-population.service';
-import { KtPopulation } from '@waggle/entity';
 import { JobLogService } from '../../job-log/job-log.service';
+import { PlacePopulation } from '@waggle/entity';
+import { PlacePopulationService } from '../../place-population/place-population.service';
 
 @Injectable()
 export class PlacePopulationWorker implements OnModuleInit, OnModuleDestroy {
@@ -21,7 +21,7 @@ export class PlacePopulationWorker implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     private readonly redis: RedisService,
-    private readonly ktPopulationService: KtPopulationService,
+    private readonly placePopulationService: PlacePopulationService,
     private readonly jobLogService: JobLogService,
   ) {}
 
@@ -101,15 +101,15 @@ export class PlacePopulationWorker implements OnModuleInit, OnModuleDestroy {
     }
 
     const instance = this.createPopulationEntity(placeIdx, data['SeoulRtd.citydata_ppltn'][0]);
-    await this.ktPopulationService.upsertPopulation(instance);
+    await this.placePopulationService.upsertPopulation(instance);
   }
 
-  private createPopulationEntity(placeIdx: number, apiResult: CityDataPopulation): KtPopulation {
-    return KtPopulation.createInstance({
+  private createPopulationEntity(placeIdx: number, apiResult: CityDataPopulation): PlacePopulation {
+    return PlacePopulation.createInstance({
       place: {
         idx: placeIdx,
       },
-      level: KtPopulation.getPopulationLevelByApiResult(apiResult.AREA_CONGEST_LVL),
+      level: PlacePopulation.getPopulationLevelByApiResult(apiResult.AREA_CONGEST_LVL),
       message: apiResult.AREA_CONGEST_MSG,
       male: Number(apiResult.MALE_PPLTN_RATE),
       female: Number(apiResult.FEMALE_PPLTN_RATE),

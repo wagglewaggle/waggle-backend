@@ -1,19 +1,16 @@
 import { Exclude, Expose } from 'class-transformer';
-import { KtPlaceLocationResponseDto } from './kt-place-location-response.dto';
-import { SktPlaceLocationResponseDto } from './skt-place-location-response.dto';
-import { KtPlace, SktPlace, Location } from '@waggle/entity';
+import { Location, Place } from '@waggle/entity';
+import { PlaceLocationResponseDto } from './place-location-response.dto';
 
 export class LocationResponseDto {
   @Exclude() private readonly _idx: number;
   @Exclude() private readonly _name: string;
-  @Exclude() private readonly _ktPlaces: KtPlace[];
-  @Exclude() private readonly _sktPlaces: SktPlace[];
+  @Exclude() private readonly _places: Place[];
 
   constructor(location: Location) {
     this._idx = location.idx;
     this._name = location.name;
-    this._ktPlaces = location.ktPlaces;
-    this._sktPlaces = location.sktPlaces;
+    this._places = location.places;
   }
 
   @Expose()
@@ -27,12 +24,7 @@ export class LocationResponseDto {
   }
 
   @Expose()
-  get ktPlaces(): KtPlaceLocationResponseDto[] {
-    return this._ktPlaces.map((place) => new KtPlaceLocationResponseDto(place));
-  }
-
-  @Expose()
-  get sktPlaces(): SktPlaceLocationResponseDto[] {
-    return this._sktPlaces.map((place) => new SktPlaceLocationResponseDto(place));
+  get places(): PlaceLocationResponseDto[] {
+    return this._places.map((place) => new PlaceLocationResponseDto(place));
   }
 }
