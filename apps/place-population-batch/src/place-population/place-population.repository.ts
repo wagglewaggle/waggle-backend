@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { KtPopulation } from '@waggle/entity';
+import { PlacePopulation } from '@waggle/entity';
 import { EntityManager, InsertResult, Repository } from 'typeorm';
 
 @Injectable()
-export class KtPopulationRepository {
+export class PlacePopulationRepository {
   constructor(
-    @InjectRepository(KtPopulation)
-    private readonly repository: Repository<KtPopulation>,
+    @InjectRepository(PlacePopulation)
+    private readonly repository: Repository<PlacePopulation>,
   ) {}
 
-  async upsert(population: KtPopulation, manager?: EntityManager): Promise<InsertResult> {
+  async upsert(population: PlacePopulation, manager?: EntityManager): Promise<InsertResult> {
     const query =
-      'INSERT INTO kt_population' +
+      'INSERT INTO place_population' +
       '(placeIdx, level, message, ' +
       'male, female, zeroGen, teenager, twenties, thirties, forties, fifties, sixties, seventies, resident, nonResident) ' +
       'VALUES' +

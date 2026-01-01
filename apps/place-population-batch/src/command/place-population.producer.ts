@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { DataSource } from 'typeorm';
-import { KtPlace, KtPlaceStatus } from '@waggle/entity';
 import { RedisModule, RedisService } from '@waggle/redis';
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MysqlConfigService } from '../app/mysql/mysql-config.service';
 import { config } from '../app/config/config.service';
+import { Place, PlaceStatus } from '@waggle/entity';
 
 const REDIS_STREAM_KEY = 'place:population:queue';
 
@@ -27,10 +27,10 @@ async function placePopulationProduce() {
     const dataSource = app.get(DataSource);
     const redisService = app.get(RedisService);
 
-    const places = await dataSource.getRepository(KtPlace).find({
+    const places = await dataSource.getRepository(Place).find({
       select: ['idx', 'name'],
       where: {
-        status: KtPlaceStatus.Activated,
+        status: PlaceStatus.Activated,
       },
     });
 
