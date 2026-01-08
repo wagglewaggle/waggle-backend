@@ -1,98 +1,55 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Place Population Batch
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+서울시 실시간 도시데이터 API를 통해, 데이터를 수집하고 가공하는 배치 애플리케이션입니다.  
+**Producer/Consumer 패턴**을 적용하여 방대한 데이터를 처리하고, 확장성을 고려하도록 했습니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Architecture Details
 
-## Description
+이 앱은 두 가지 역할로 나뉘어 동작합니다.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 1. Producer (`src/command/place-population.producer.ts`)
 
-## Project setup
+DB에서 데이터 수집 대상(`status: ACTIVATED`)인 장소를 조회하여 Redis Streams에 메시지를 생성합니다.
 
-```bash
-$ pnpm install
-```
+- **Trigger**: OS Cron 또는 수동 실행
+- **Redis Key**: `place:population:queue`
 
-## Compile and run the project
+### 2. Worker (`src/worker/place-population/place-population.worker.ts`)
 
-```bash
-# development
-$ pnpm run start
+Redis Streams에 쌓인 메시지를 수신하고, 외부 API를 호출하고 데이터를 수집, 가공합니다.
 
-# watch mode
-$ pnpm run start:dev
+- **로직**
+  1. Redis Streams에서 `placeIdx`, `name` 수신
+  2. API 호출
+  3. 데이터 파싱
+  4. MySQL DB 업데이트 (`Upsert`)
+  5. Message ACK 처리
 
-# production mode
-$ pnpm run start:prod
-```
+## API Key
 
-## Run tests
+이 서비스는 서울 열린데이터 광장에서 제공하는 API Key가 필수입니다.  
+아래의 링크에서 API 정보를 확인할 수 있습니다.  
+https://data.seoul.go.kr/dataList/OA-21285/F/1/datasetView.do
 
-```bash
-# unit tests
-$ pnpm run test
+API Key를 .env에 등록합니다.
 
-# e2e tests
-$ pnpm run test:e2e
+- `PLACE_POPULATION_API_KEY`: 서울 열린데이터 광장 API 인증키
 
-# test coverage
-$ pnpm run test:cov
-```
+## Test
 
-## Deployment
+테스트를 하려면, Producer를 통해 MQ에 메시지를 발행한 후 Consumer로 처리해야합니다.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+> ‼️ 중요 ‼️  
+> Redis Streams는 **Consumer Group**을 지원합니다.  
+> Consumer Group이 생성되고 난 후, Stream에 메시지가 발행되어야만 Consumer가 작업을 처리하기 때문에  
+> **Consumer에서 Consumer Group을 먼저 생성하고, Producer를 실행합니다.**
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+아래의 명령어로 실행 가능합니다.
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Producer 실행
+$ pnpm run start:producer
+
+# Consumer 실행
+$ pnpm run start:consumer
 ```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
