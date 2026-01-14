@@ -1,7 +1,7 @@
 # Waggle Waggle (와글와글) Backend
 
 서울시 주요 핫플레이스의 **실시간 인구 혼잡도, 교통 상황, 사고 정보**를 수집하고 제공하는 서비스의 백엔드 시스템입니다.  
-NestJS 기반의 **Monorepo**로 구성되어 있으며, 주기적인 데이터 수집을 위해 **Redis Streams**를 활용한 비동기 아키텍처를 채택했습니다.
+NestJS 기반의 **Monorepo**로 구성되어 있으며, 주기적인 데이터 수집을 위해 **Redis Streams**를 활용한 이벤트 기반 아키텍처를 채택했습니다.
 
 ## System Architecture (전체 구조)
 
@@ -9,11 +9,11 @@ NestJS 기반의 **Monorepo**로 구성되어 있으며, 주기적인 데이터 
 
 ```mermaid
 graph LR
-    External[혼잡도 API] -->|Data Fetch| Worker[Population Batch Worker]
+    External[혼잡도 API] -->|Data Fetch| Consumer[Population Batch Consumer]
     Cron[Trigger] -->|Job Create| Producer[Population Batch Producer]
     Producer -->|Stream Push| Redis[(Redis Streams)]
-    Redis -->|Consume| Worker
-    Worker -->|Upsert| DB[(MySQL)]
+    Redis -->|Consume| Consumer
+    Consumer -->|Upsert| DB[(MySQL)]
     Client -->|Request| API[API Server]
     API -->|Query| DB
 ```
@@ -33,7 +33,8 @@ graph LR
 
 - **Framework**: `NestJS` (`Node.js`)
 - **Language**: `Typescript`
-- **Database**: `MySQL` (`TypeORM`), `Redis`
+- **Database**: `MySQL(TypeORM)`, `Redis`
+- **Event Driven Architecture**: `Redis Streams`, `Producer/Consumer`, `Cron`
 - **Package Manager**: `pnpm`
 - **Infra/Tools**: `Docker`, `PM2` (Optional)
 

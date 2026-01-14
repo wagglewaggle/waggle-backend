@@ -1,22 +1,22 @@
 # Place Population Batch
 
-서울시 실시간 도시데이터 API를 통해, 데이터를 수집하고 가공하는 배치 애플리케이션입니다.  
+서울시 실시간 도시데이터 API를 통해, 일정 주기마다 데이터를 수집하고 가공하는 애플리케이션입니다.  
 **Producer/Consumer 패턴**을 적용하여 방대한 데이터를 처리하고, 확장성을 고려하도록 했습니다.
 
 ## Architecture Details
 
 이 앱은 두 가지 역할로 나뉘어 동작합니다.
 
-### 1. Producer (`src/command/place-population.producer.ts`)
+### 1. Producer (`src/producer/place-population.producer.ts`)
 
-DB에서 데이터 수집 대상(`status: ACTIVATED`)인 장소를 조회하여 Redis Streams에 메시지를 생성합니다.
+DB에서 데이터 수집 대상(`status: ACTIVATED`)인 장소를 조회하여 Redis Streams에 이벤트를 생성합니다.
 
 - **Trigger**: OS Cron 또는 수동 실행
 - **Redis Key**: `place:population:queue`
 
-### 2. Worker (`src/worker/place-population/place-population.worker.ts`)
+### 2. Consumer (`src/consumer/place-population/place-population.consumer.ts`)
 
-Redis Streams에 쌓인 메시지를 수신하고, 외부 API를 호출하고 데이터를 수집, 가공합니다.
+Redis Streams에 쌓인 이벤트를 수신하고, 외부 API를 호출하고 데이터를 수집, 가공합니다.
 
 - **로직**
   1. Redis Streams에서 `placeIdx`, `name` 수신
@@ -37,11 +37,11 @@ API Key를 .env에 등록합니다.
 
 ## Test
 
-테스트를 하려면, Producer를 통해 MQ에 메시지를 발행한 후 Consumer로 처리해야합니다.
+테스트를 하려면, Producer를 통해 이벤트 브로커에 이벤트를 발행한 후 Consumer로 처리해야 합니다.
 
 > ‼️ 중요 ‼️  
 > Redis Streams는 **Consumer Group**을 지원합니다.  
-> Consumer Group이 생성되고 난 후, Stream에 메시지가 발행되어야만 Consumer가 작업을 처리하기 때문에  
+> Consumer Group이 생성되고 난 후, Stream에 이벤트가 발행되어야만 Consumer가 작업을 처리하기 때문에  
 > **Consumer에서 Consumer Group을 먼저 생성하고, Producer를 실행합니다.**
 
 아래의 명령어로 실행 가능합니다.
