@@ -14,9 +14,9 @@ import { PlacePopulation } from '@waggle/entity';
 import { PlacePopulationService } from '../../place-population/place-population.service';
 
 @Injectable()
-export class PlacePopulationWorker implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(PlacePopulationWorker.name);
-  private readonly WORKER_NAME: string = `worker-${Math.random().toString(36).substring(7)}`;
+export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(PlacePopulationConsumer.name);
+  private readonly CONSUMER_NAME: string = `consumer-${Math.random().toString(36).substring(7)}`;
   private isRunning = true;
 
   constructor(
@@ -39,7 +39,7 @@ export class PlacePopulationWorker implements OnModuleInit, OnModuleDestroy {
   }
 
   async run() {
-    this.logger.log(`[${this.WORKER_NAME}] Started Listening...`);
+    this.logger.log(`[${this.CONSUMER_NAME}] Started Listening...`);
 
     while (this.isRunning) {
       const start = new Date();
@@ -48,7 +48,7 @@ export class PlacePopulationWorker implements OnModuleInit, OnModuleDestroy {
         const streamData = (await this.redis.client.xreadgroup(
           'GROUP',
           PLACE_POPULATION_REDIS_GROUP,
-          this.WORKER_NAME,
+          this.CONSUMER_NAME,
           'COUNT',
           1,
           'BLOCK',
@@ -74,14 +74,14 @@ export class PlacePopulationWorker implements OnModuleInit, OnModuleDestroy {
 
         this.logger.log(`[${parsedData.name}(${parsedData.placeIdx})] successfully updated`);
         this.jobLogService.add(
-          this.WORKER_NAME,
+          this.CONSUMER_NAME,
           `[${parsedData.name}(${parsedData.placeIdx})] successfully updated`,
           (new Date().getTime() - start.getTime()) / 1000,
         );
       } catch (e) {
         console.log(e);
         this.logger.error(`Stream Error: ${e.message}`);
-        this.jobLogService.add(this.WORKER_NAME, `Stream Error: ${e.message}`, (new Date().getTime() - start.getTime()) / 1000);
+        this.jobLogService.add(this.CONSUMER_NAME, `Stream Error: ${e.message}`, (new Date().getTime() - start.getTime()) / 1000);
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }

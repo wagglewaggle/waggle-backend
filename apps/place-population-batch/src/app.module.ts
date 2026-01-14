@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { WorkerModule } from './worker/worker.module';
+import { ConsumerModule } from './consumer/consumer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RedisModule } from '@waggle/redis';
 import { MysqlConfigService } from './app/mysql/mysql-config.service';
@@ -9,6 +9,6 @@ const TypeOrmRootModule = TypeOrmModule.forRootAsync({ useClass: MysqlConfigServ
 const RedisRootModule = RedisModule.register({ host: config.redisHost, port: config.redisPort });
 
 @Module({
-  imports: [TypeOrmRootModule, RedisRootModule, WorkerModule],
+  imports: [TypeOrmRootModule, RedisRootModule, ConsumerModule],
 })
 export class AppModule {}
