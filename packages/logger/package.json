@@ -1,0 +1,24 @@
+{
+  "name": "@waggle/logger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && nest build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.26.2",
+  "dependencies": {
+    "@nestjs/common": "^11.1.12",
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.15",
+    "rimraf": "^6.1.2",
+    "typescript": "^5.9.3"
+  }
+}
