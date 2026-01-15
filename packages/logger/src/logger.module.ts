@@ -6,7 +6,7 @@ import { LOGGER_CONFIG_TOKEN } from './logger.constant';
 @Global()
 @Module({})
 export class LoggerModule {
-  static register(config: LoggerConfig): DynamicModule {
+  static forRoot(config: LoggerConfig): DynamicModule {
     return {
       module: LoggerModule,
       providers: [
