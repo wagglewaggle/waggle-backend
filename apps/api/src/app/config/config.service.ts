@@ -20,6 +20,7 @@ export class ConfigService {
       ENV: Joi.string()
         .valid(...envValues)
         .default(ENV.DEVELOPMENT),
+      USE_CONSOLE_LOGGER: Joi.boolean().default(true),
       API_HOST: Joi.string().default('0.0.0.0'),
       API_PORT: Joi.number().default(3000),
       MYSQL_HOST: Joi.string().required(),
@@ -42,6 +43,10 @@ export class ConfigService {
 
   get environment(): ENV {
     return this.envConfig.ENV;
+  }
+
+  get useConsoleLogger(): boolean {
+    return this.envConfig.USE_CONSOLE_LOGGER;
   }
 
   get apiHost(): string {

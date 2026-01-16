@@ -1,27 +1,33 @@
 import { NestFactory } from '@nestjs/core';
 import { DataSource } from 'typeorm';
 import { RedisModule, RedisService } from '@waggle/redis';
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MysqlConfigService } from '../app/mysql/mysql-config.service';
 import { config } from '../app/config/config.service';
 import { Place, PlaceStatus } from '@waggle/entity';
+import { LoggerModule, LoggerService } from '@waggle/logger';
 
 const REDIS_STREAM_KEY = 'place:population:queue';
 
 const TypeOrmRootModule = TypeOrmModule.forRootAsync({ useClass: MysqlConfigService });
-const RedisRootModule = RedisModule.register({ host: config.redisHost, port: config.redisPort });
+const RedisRootModule = RedisModule.forRoot({ host: config.redisHost, port: config.redisPort });
+const LoggerRootModule = LoggerModule.forRoot({
+  labelName: `${config.projectName}-producer`,
+  printConsole: config.useConsoleLogger,
+  rotateOption: {
+    zippedArchive: true,
+  },
+});
 
 @Module({
-  imports: [TypeOrmRootModule, RedisRootModule],
+  imports: [TypeOrmRootModule, RedisRootModule, LoggerRootModule],
 })
 class PlacePopulationModule {}
 
 async function placePopulationProduce() {
-  const app = await NestFactory.createApplicationContext(PlacePopulationModule, {
-    logger: ['error', 'warn', 'log'],
-  });
-  const logger = new Logger('PlaceProducer');
+  const app = await NestFactory.createApplicationContext(PlacePopulationModule);
+  const logger = app.get<LoggerService>(LoggerService);
 
   try {
     const dataSource = app.get(DataSource);
@@ -47,7 +53,7 @@ async function placePopulationProduce() {
 
     await pipeline.exec();
 
-    logger.log(`✅ Place Producer Done. Total ${places.length}. `);
+    logger.log(`✅ Place Producer Done. Total ${places.length}.`);
   } catch (e) {
     logger.error('❌ Place Producer Error', e);
     process.exit(1);

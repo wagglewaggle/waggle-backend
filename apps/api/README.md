@@ -24,16 +24,17 @@ $ pnpm run apidoc:start
 
 ## Configuration (.env)
 
-| 변수명           | 설명              | 예시             |
-| ---------------- | ----------------- | ---------------- |
-| `PROJECT_NAME`   | 프로젝트 이름     | wagglewaggle-api |
-| `API_HOST`       | API 호스트 정보   | localhost        |
-| `API_PORT`       | API 포트 정보     | 3000             |
-| `MYSQL_HOST`     | MySQL 호스트 정보 | localhost        |
-| `MYSQL_PORT`     | MySQL 포트 정보   | 3306             |
-| `MYSQL_DATABASE` | DB 정보           | wagglewaggle     |
-| `MYSQL_USERNAME` | DB 유저 이름      | root             |
-| `MYSQL_PASSWORD` | DB 비밀번호 정보  | 1234             |
+| 변수명               | 설명                                | 예시             |
+| -------------------- | ----------------------------------- | ---------------- |
+| `PROJECT_NAME`       | 프로젝트 이름                       | wagglewaggle-api |
+| `USE_CONSOLE_LOGGER` | 콘솔 로그 사용 여부 (default: true) | false            |
+| `API_HOST`           | API 호스트 정보                     | localhost        |
+| `API_PORT`           | API 포트 정보                       | 3000             |
+| `MYSQL_HOST`         | MySQL 호스트 정보                   | localhost        |
+| `MYSQL_PORT`         | MySQL 포트 정보                     | 3306             |
+| `MYSQL_DATABASE`     | DB 정보                             | wagglewaggle     |
+| `MYSQL_USERNAME`     | DB 유저 이름                        | root             |
+| `MYSQL_PASSWORD`     | DB 비밀번호 정보                    | 1234             |
 
 ## Run
 

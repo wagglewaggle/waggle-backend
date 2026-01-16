@@ -21,7 +21,7 @@ export class ConfigService {
         .valid(...envValues)
         .default(ENV.DEVELOPMENT),
       USE_SENTRY: Joi.boolean().required().default(false),
-      USE_CONSOLE_SCHEDULER: Joi.boolean().required().default(false),
+      USE_CONSOLE_LOGGER: Joi.boolean().required().default(false),
       MYSQL_HOST: Joi.string().required(),
       MYSQL_PORT: Joi.number().required(),
       MYSQL_DATABASE: Joi.string().required(),
@@ -48,8 +48,8 @@ export class ConfigService {
   get useSentry(): boolean {
     return this.envConfig.USE_SENTRY;
   }
-  get useConsoleScheduler(): boolean {
-    return this.envConfig.USE_CONSOLE_SCHEDULER;
+  get useConsoleLogger(): boolean {
+    return this.envConfig.USE_CONSOLE_LOGGER;
   }
   get mysqlHost(): string {
     return this.envConfig.MYSQL_HOST;

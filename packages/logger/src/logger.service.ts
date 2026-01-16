@@ -1,8 +1,9 @@
-import { ConsoleLogger, Injectable } from '@nestjs/common';
+import { ConsoleLogger, Inject, Injectable } from '@nestjs/common';
 import * as winston from 'winston';
 import { format, createLogger, transports } from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
-import { config } from '../config/config.service';
+import { LOGGER_CONFIG_TOKEN } from './logger.constant';
+import { LoggerConfig } from './logger.interface';
 
 @Injectable()
 export class LoggerService extends ConsoleLogger {
@@ -13,15 +14,23 @@ export class LoggerService extends ConsoleLogger {
   private readonly rotateErrorLogger: winston.Logger;
   private readonly stdoutLogger: winston.Logger;
 
-  constructor() {
+  private readonly printConsole: boolean = true;
+
+  constructor(@Inject(LOGGER_CONFIG_TOKEN) private config: LoggerConfig) {
     super();
 
-    this.rotateLoggerFormat = format.combine(format.label({ label: config.projectName }), format.timestamp(), format.json());
+    this.printConsole = this.config.printConsole;
+
+    const label = format.label({ label: this.config.labelName });
+    this.rotateLoggerFormat = format.combine(label, format.timestamp(), format.json());
+
+    const { rotateOption } = this.config;
     this.rotateOptions = {
-      datePattern: 'YYYY-MM-DD',
-      maxFiles: '5d',
-      maxSize: '100m',
-      utc: true,
+      datePattern: rotateOption.datePattern,
+      maxSize: rotateOption.maxSize || '100m',
+      maxFiles: rotateOption.maxFiles || '5d',
+      utc: rotateOption.utc,
+      zippedArchive: rotateOption.zippedArchive,
     };
 
     this.rotateLogger = createLogger({
@@ -30,35 +39,37 @@ export class LoggerService extends ConsoleLogger {
       transports: [
         new DailyRotateFile({
           level: 'info',
-          filename: `./logs/%DATE%/${config.projectName}.log`,
+          filename: `./logs/%DATE%/${this.config.labelName}.log`,
           ...this.rotateOptions,
         }),
       ],
     });
-
     this.rotateErrorLogger = createLogger({
       level: 'error',
       format: this.rotateLoggerFormat,
       transports: [
         new DailyRotateFile({
           level: 'error',
-          filename: `./logs/%DATE%/${config.projectName}-error.log`,
+          filename: `./logs/%DATE%/${this.config.labelName}-error.log`,
           ...this.rotateOptions,
         }),
       ],
     });
-
     this.stdoutLogger = createLogger({
       format: format.simple(),
-      transports: [new transports.Console()],
+      transports: [
+        new transports.Console({
+          silent: !this.printConsole,
+        }),
+      ],
     });
   }
 
-  getFileLogger(isError: boolean): winston.Logger {
+  private getFileLogger(isError: boolean): winston.Logger {
     return isError ? this.rotateErrorLogger : this.rotateLogger;
   }
 
-  getConsoleLogger(): winston.Logger {
+  private getConsoleLogger(): winston.Logger {
     return this.stdoutLogger;
   }
 
@@ -71,12 +82,12 @@ export class LoggerService extends ConsoleLogger {
     this.getConsoleLogger().warn(message, meta);
   }
   debug(message: string, meta?: unknown): void {
-    this.getFileLogger(false).info(message, meta);
-    this.getConsoleLogger().info(message, meta);
+    this.getFileLogger(false).debug(message, meta);
+    this.getConsoleLogger().debug(message, meta);
   }
   verbose(message: string, meta?: unknown): void {
-    this.getFileLogger(false).info(message, meta);
-    this.getConsoleLogger().info(message, meta);
+    this.getFileLogger(false).verbose(message, meta);
+    this.getConsoleLogger().verbose(message, meta);
   }
   error(message: string, meta?: unknown): void {
     this.getFileLogger(true).error(message, meta);

@@ -1,16 +1,16 @@
 import { CallHandler, ExecutionContext, HttpException, Injectable, InternalServerErrorException, NestInterceptor } from '@nestjs/common';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { LoggerService } from '../logger/logger.service';
 import { IRequestAugmented } from '../app.interface';
 import { getClientIp } from 'request-ip';
 import { ILoggingObject } from './logging.constant';
+import { LoggerService } from '@waggle/logger';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private readonly LOGGER_MESSAGE = 'clientRequest';
   private logObj: ILoggingObject;
 
-  constructor(private readonly loggerService: LoggerService) {}
+  constructor(private readonly logger: LoggerService) {}
 
   intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
     const http = context.switchToHttp();
@@ -40,7 +40,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
         this.calculateElapsedTime();
 
-        this.loggerService.log(this.LOGGER_MESSAGE, this.logObj);
+        this.logger.log(this.LOGGER_MESSAGE, this.logObj);
       }),
       catchError((e) => {
         this.logObj.success = false;
@@ -51,7 +51,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
         this.calculateElapsedTime();
 
-        this.loggerService.error(this.LOGGER_MESSAGE, this.logObj);
+        this.logger.error(this.LOGGER_MESSAGE, this.logObj);
 
         return throwError(() => (e instanceof HttpException ? e : new InternalServerErrorException(e)));
       }),

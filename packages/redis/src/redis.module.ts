@@ -6,7 +6,7 @@ import { RedisOptions } from 'ioredis';
 @Global()
 @Module({})
 export class RedisModule {
-  static register(options: RedisOptions): DynamicModule {
+  static forRoot(options: RedisOptions): DynamicModule {
     return {
       module: RedisModule,
       providers: [
