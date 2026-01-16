@@ -13,7 +13,7 @@ const REDIS_STREAM_KEY = 'place:population:queue';
 const TypeOrmRootModule = TypeOrmModule.forRootAsync({ useClass: MysqlConfigService });
 const RedisRootModule = RedisModule.forRoot({ host: config.redisHost, port: config.redisPort });
 const LoggerRootModule = LoggerModule.forRoot({
-  labelName: config.projectName,
+  labelName: `${config.projectName}-producer`,
   printConsole: config.useConsoleLogger,
   rotateOption: {
     zippedArchive: true,

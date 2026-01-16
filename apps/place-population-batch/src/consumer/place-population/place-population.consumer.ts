@@ -6,13 +6,15 @@ import {
   PLACE_POPULATION_REDIS_GROUP,
   PLACE_POPULATION_REDIS_KEY,
 } from './place-population.constant';
-import Axios from 'axios';
+import Axios, { isAxiosError } from 'axios';
 import { config } from '../../app/config/config.service';
 import { CityDataPopulation, PlacePopulationApiData } from './place-population.interface';
 import { JobLogService } from '../../job-log/job-log.service';
 import { PlacePopulation } from '@waggle/entity';
 import { PlacePopulationService } from '../../place-population/place-population.service';
 import { LoggerService } from '@waggle/logger';
+import { TypeORMError } from 'typeorm';
+import { ErrorLevel, SchedulerError } from '../../app/error/scheduler.error';
 
 @Injectable()
 export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
@@ -74,8 +76,19 @@ export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
 
         this.logger.log(`[${parsedData.name}(${parsedData.placeIdx})] successfully updated`);
       } catch (e) {
-        this.logger.error(`[${this.CONSUMER_NAME}] Error:`, e);
-        this.jobLogService.add(this.CONSUMER_NAME, `Error: ${e.message}`, (new Date().getTime() - start.getTime()) / 1000);
+        if (e instanceof SchedulerError) {
+          if (e.level === ErrorLevel.Fatal) {
+            this.logger.error(`[${this.CONSUMER_NAME}] Error: ${e.message}`, { errorLevel: e.level, stack: e.extras?.stack });
+            this.jobLogService.add(this.CONSUMER_NAME, `Error: ${e.message}`, (new Date().getTime() - start.getTime()) / 1000);
+            break;
+          } else {
+            this.logger.warn(`[${this.CONSUMER_NAME}] Warning: ${e.message}`);
+          }
+        } else {
+          this.logger.error(`[${this.CONSUMER_NAME}] Error:`, e);
+          this.jobLogService.add(this.CONSUMER_NAME, `Error: ${e.message}`, (new Date().getTime() - start.getTime()) / 1000);
+          break;
+        }
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
@@ -85,17 +98,32 @@ export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
   private async processData(parsedData: { placeIdx: number; name: string }) {
     const { placeIdx, name } = parsedData;
 
-    const apiUrl = `${PLACE_POPULATION_API_HOST}/${config.placePopulationApiKey}/${PLACE_POPULATION_API_ENDPOINT}`;
+    try {
+      const apiUrl = `${PLACE_POPULATION_API_HOST}/${config.placePopulationApiKey}/${PLACE_POPULATION_API_ENDPOINT}`;
 
-    const { data } = await Axios.get<PlacePopulationApiData>(`${apiUrl}/${name}`);
+      const { data } = await Axios.get<PlacePopulationApiData>(`${apiUrl}/${name}`);
 
-    if (data.RESULT['RESULT.CODE'] !== 'INFO-000') {
-      this.logger.warn(`undefined city data : ${name}(${placeIdx})`);
-      return;
+      if (data.RESULT['RESULT.CODE'] !== 'INFO-000') {
+        this.logger.warn(`undefined city data : ${name}(${placeIdx})`);
+        return;
+      }
+
+      const instance = this.createPopulationEntity(placeIdx, data['SeoulRtd.citydata_ppltn'][0]);
+      await this.placePopulationService.upsertPopulation(instance);
+    } catch (e) {
+      if (isAxiosError(e)) {
+        const errorMessage = `[Axios Error] ${name}(${placeIdx}): ${e.code}, ${e.status}, ${e.message}`;
+        if (e.status && e.status / 100 === 5) {
+          throw new SchedulerError(errorMessage, ErrorLevel.Normal, e);
+        } else {
+          throw new SchedulerError(errorMessage, ErrorLevel.Fatal, e);
+        }
+      } else if (e instanceof TypeORMError) {
+        throw new SchedulerError(`[TypeORM Error] ${name}(${placeIdx}): ${e.message}`, ErrorLevel.Fatal, e);
+      } else {
+        throw new SchedulerError(`[Unknown Error] ${name}(${placeIdx}): ${e.message}`, ErrorLevel.Fatal, e);
+      }
     }
-
-    const instance = this.createPopulationEntity(placeIdx, data['SeoulRtd.citydata_ppltn'][0]);
-    await this.placePopulationService.upsertPopulation(instance);
   }
 
   private createPopulationEntity(placeIdx: number, apiResult: CityDataPopulation): PlacePopulation {

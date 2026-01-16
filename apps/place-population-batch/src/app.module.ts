@@ -9,7 +9,7 @@ import { LoggerModule } from '@waggle/logger';
 const TypeOrmRootModule = TypeOrmModule.forRootAsync({ useClass: MysqlConfigService });
 const RedisRootModule = RedisModule.forRoot({ host: config.redisHost, port: config.redisPort });
 const LoggerRootModule = LoggerModule.forRoot({
-  labelName: config.projectName,
+  labelName: `${config.projectName}-consumer`,
   printConsole: config.useConsoleLogger,
   rotateOption: {
     zippedArchive: true,
