@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { RedisService } from '@waggle/redis';
 import {
   PLACE_POPULATION_API_ENDPOINT,
@@ -12,15 +12,16 @@ import { CityDataPopulation, PlacePopulationApiData } from './place-population.i
 import { JobLogService } from '../../job-log/job-log.service';
 import { PlacePopulation } from '@waggle/entity';
 import { PlacePopulationService } from '../../place-population/place-population.service';
+import { LoggerService } from '@waggle/logger';
 
 @Injectable()
 export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(PlacePopulationConsumer.name);
   private readonly CONSUMER_NAME: string = `consumer-${Math.random().toString(36).substring(7)}`;
   private isRunning = true;
 
   constructor(
     private readonly redis: RedisService,
+    private readonly logger: LoggerService,
     private readonly placePopulationService: PlacePopulationService,
     private readonly jobLogService: JobLogService,
   ) {}
@@ -28,7 +29,6 @@ export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     try {
       await this.redis.client.xgroup('CREATE', PLACE_POPULATION_REDIS_KEY, PLACE_POPULATION_REDIS_GROUP, '$', 'MKSTREAM');
-      this.logger.log('Consumer Group Created');
     } catch (e) {
       if (!e.message.includes('BUSYGROUP')) {
         this.logger.error('Redis Group Error', e);
@@ -73,15 +73,9 @@ export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
         await this.redis.client.xdel(PLACE_POPULATION_REDIS_KEY, messageId);
 
         this.logger.log(`[${parsedData.name}(${parsedData.placeIdx})] successfully updated`);
-        this.jobLogService.add(
-          this.CONSUMER_NAME,
-          `[${parsedData.name}(${parsedData.placeIdx})] successfully updated`,
-          (new Date().getTime() - start.getTime()) / 1000,
-        );
       } catch (e) {
-        console.log(e);
-        this.logger.error(`Stream Error: ${e.message}`);
-        this.jobLogService.add(this.CONSUMER_NAME, `Stream Error: ${e.message}`, (new Date().getTime() - start.getTime()) / 1000);
+        this.logger.error(`[${this.CONSUMER_NAME}] Error:`, e);
+        this.jobLogService.add(this.CONSUMER_NAME, `Error: ${e.message}`, (new Date().getTime() - start.getTime()) / 1000);
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
@@ -96,7 +90,7 @@ export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
     const { data } = await Axios.get<PlacePopulationApiData>(`${apiUrl}/${name}`);
 
     if (data.RESULT['RESULT.CODE'] !== 'INFO-000') {
-      this.logger.error(`undefined city data : ${name}(${placeIdx})`);
+      this.logger.warn(`undefined city data : ${name}(${placeIdx})`);
       return;
     }
 

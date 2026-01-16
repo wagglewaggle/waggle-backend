@@ -14,12 +14,12 @@ export class LoggerService extends ConsoleLogger {
   private readonly rotateErrorLogger: winston.Logger;
   private readonly stdoutLogger: winston.Logger;
 
-  private readonly printConsole: boolean;
+  private readonly printConsole: boolean = true;
 
   constructor(@Inject(LOGGER_CONFIG_TOKEN) private config: LoggerConfig) {
     super();
 
-    this.printConsole = this.config.printConsole || true;
+    this.printConsole = this.config.printConsole;
 
     const label = format.label({ label: this.config.labelName });
     this.rotateLoggerFormat = format.combine(label, format.timestamp(), format.json());
