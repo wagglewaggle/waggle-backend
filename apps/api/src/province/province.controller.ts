@@ -3,17 +3,27 @@ import { GetProvinceIdxDto } from './province.dto';
 import { ProvinceService } from './province.service';
 import { ApiPath } from './province.constant';
 import { Province } from '@waggle/entity';
+import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ProvinceResponseDto } from './dtos/province-response.dto';
+import { IListCountResponse, IListResponse } from '../app/interfaces/common.interface';
+import { ApiListResponse } from '../app/utils/swagger.util';
 
+@ApiTags('Province')
 @Controller(ApiPath.Root)
 export class ProvinceController {
   constructor(private readonly provinceService: ProvinceService) {}
 
   @Get()
-  async getAllProvinces(): Promise<Province[]> {
-    return await this.provinceService.getAllProvince();
+  @ApiOperation({ summary: '모든 광역시 조회', description: '모든 광역시 목록을 조회합니다.' })
+  @ApiListResponse(ProvinceResponseDto)
+  async getAllProvinces(): Promise<IListResponse<ProvinceResponseDto>> {
+    const provinces = await this.provinceService.getAllProvince();
+    return { list: provinces.map((province) => new ProvinceResponseDto(province)) };
   }
 
   @Get(ApiPath.GetProvinceIdx)
+  @ApiOperation({ summary: '특정 광역시 조회', description: '특정 광역시의 상세 정보를 조회합니다.' })
+  @ApiOkResponse({ type: ProvinceResponseDto })
   async getProvince(@Param() param: GetProvinceIdxDto) {
     return await this.provinceService.getProvince(param.idx);
   }

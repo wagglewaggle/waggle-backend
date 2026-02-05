@@ -6,6 +6,7 @@ import { Category, Cctv, Place, PlaceAccident, PlacePopulation, PlaceRoadTraffic
 import { PlacePopulationResponseDto } from './place-population-response.dto';
 import { PlaceAccidentResponseDto } from './place-accident-response.dto';
 import { PlaceRoadTrafficResponseDto } from './place-road-traffic-response.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class PlaceResponseDto {
   @Exclude() private readonly _idx: number;
@@ -32,26 +33,31 @@ export class PlaceResponseDto {
     this._location = location;
   }
 
+  @ApiProperty({ example: 1, description: '장소 idx' })
   @Expose()
   get idx(): number {
     return this._idx;
   }
 
+  @ApiProperty({ example: '강남 MICE 관광특구', description: '장소 이름' })
   @Expose()
   get name(): string {
     return this._name;
   }
 
+  @ApiProperty({ example: 37.5109513663511, description: 'x좌표' })
   @Expose()
   get x(): number {
     return this._x;
   }
 
+  @ApiProperty({ example: 127.060167789459, description: 'y좌표' })
   @Expose()
   get y(): number {
     return this._y;
   }
 
+  @ApiProperty({ type: [CategoryTypeResponseDto], description: '카테고리 목록', required: false })
   @Expose()
   get categories(): CategoryTypeResponseDto[] | undefined {
     if (!this._categories) {
@@ -60,6 +66,7 @@ export class PlaceResponseDto {
     return this._categories.map((category) => new CategoryTypeResponseDto(category.type));
   }
 
+  @ApiProperty({ type: PlacePopulationResponseDto, description: '인구 정보', required: false })
   @Expose()
   get population(): PlacePopulationResponseDto | undefined {
     if (!this._population) {
@@ -68,6 +75,7 @@ export class PlaceResponseDto {
     return new PlacePopulationResponseDto(this._population);
   }
 
+  @ApiProperty({ type: [PlaceAccidentResponseDto], description: '사고 정보', required: false })
   @Expose()
   get accidents(): PlaceAccidentResponseDto[] | undefined {
     if (!this._accidents) {
@@ -76,6 +84,7 @@ export class PlaceResponseDto {
     return this._accidents.map((accident) => new PlaceAccidentResponseDto(accident));
   }
 
+  @ApiProperty({ type: [CctvResponseDto], description: 'CCTV 정보', required: false })
   @Expose()
   get cctvs(): CctvResponseDto[] | undefined {
     if (!this._cctvs) {
@@ -84,6 +93,7 @@ export class PlaceResponseDto {
     return this._cctvs.map((cctv) => new CctvResponseDto(cctv));
   }
 
+  @ApiProperty({ type: PlaceRoadTrafficResponseDto, description: '도로 교통 정보', required: false })
   @Expose()
   get roadTraffic(): PlaceRoadTrafficResponseDto | undefined {
     if (!this._roadTraffic) {
@@ -92,6 +102,7 @@ export class PlaceResponseDto {
     return new PlaceRoadTrafficResponseDto(this._roadTraffic);
   }
 
+  @ApiProperty({ type: LocationResponseDto, description: '주변 지역 정보', required: false })
   @Expose()
   get locations(): LocationResponseDto | undefined {
     if (!this._location) {
