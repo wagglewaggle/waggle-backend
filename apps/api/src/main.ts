@@ -17,7 +17,7 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Waggle Waggle API')
     .setDescription('Waggle Waggle API 문서')
-    .setVersion('1.0.0')
+    .setVersion(config.apiDocVersion)
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, document);
