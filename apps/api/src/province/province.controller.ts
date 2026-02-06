@@ -24,7 +24,8 @@ export class ProvinceController {
   @Get(ApiPath.GetProvinceIdx)
   @ApiOperation({ summary: '특정 광역시 조회', description: '특정 광역시의 상세 정보를 조회합니다.' })
   @ApiOkResponse({ type: ProvinceResponseDto })
-  async getProvince(@Param() param: GetProvinceIdxDto) {
-    return await this.provinceService.getProvince(param.idx);
+  async getProvince(@Param() param: GetProvinceIdxDto): Promise<ProvinceResponseDto> {
+    const province = await this.provinceService.getProvince(param.idx);
+    return new ProvinceResponseDto(province);
   }
 }
