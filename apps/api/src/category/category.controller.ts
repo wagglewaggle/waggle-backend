@@ -4,14 +4,20 @@ import { CategoryService } from './category.service';
 import { IListResponse } from '../app/interfaces/common.interface';
 import { CategoryTypeService } from '../category-type/category-type.service';
 import { CategoryType } from '@waggle/entity';
+import { ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { CategoryTypeResponseDto } from './dtos/category-type-response.dto';
+import { ApiListCountResponse } from '../app/utils/swagger.util';
 
+@ApiTags('Category')
 @Controller(ApiPath.Root)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService, private readonly categoryTypeService: CategoryTypeService) {}
 
   @Get()
-  async getCategoryList(): Promise<IListResponse<CategoryType>> {
-    const result = await this.categoryTypeService.getCategoryTypeList();
-    return { list: result };
+  @ApiOperation({ summary: '카테고리 목록 조회', description: '카테고리 목록을 조회합니다.' })
+  @ApiListCountResponse(CategoryTypeResponseDto)
+  async getCategoryList(): Promise<IListResponse<CategoryTypeResponseDto>> {
+    const categoryTypes = await this.categoryTypeService.getCategoryTypeList();
+    return { list: categoryTypes.map((categoryType) => new CategoryTypeResponseDto(categoryType)) };
   }
 }

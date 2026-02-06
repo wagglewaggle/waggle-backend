@@ -20,6 +20,7 @@ export class ConfigService {
       ENV: Joi.string()
         .valid(...envValues)
         .default(ENV.DEVELOPMENT),
+      API_DOC_VERSION: Joi.string().required(),
       USE_CONSOLE_LOGGER: Joi.boolean().default(true),
       API_HOST: Joi.string().default('0.0.0.0'),
       API_PORT: Joi.number().default(3000),
@@ -43,6 +44,10 @@ export class ConfigService {
 
   get environment(): ENV {
     return this.envConfig.ENV;
+  }
+
+  get apiDocVersion(): string {
+    return this.envConfig.API_DOC_VERSION;
   }
 
   get useConsoleLogger(): boolean {

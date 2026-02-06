@@ -5,18 +5,25 @@ import { PlaceListFilterQueryDto } from './place.dto';
 import { PlaceResponseDto } from './dtos/place-response.dto';
 import { ApiPath } from './place.constant';
 import { PlaceIdxParamDto } from '../app/app.dto';
+import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiListCountResponse } from '../app/utils/swagger.util';
 
+@ApiTags('Place')
 @Controller(ApiPath.Root)
 export class PlaceController {
   constructor(private readonly placeService: PlaceService) {}
 
   @Get()
+  @ApiOperation({ summary: '모든 장소 조회', description: '필터링을 통해 모든 장소를 조회합니다.' })
+  @ApiListCountResponse(PlaceResponseDto)
   async getPlaces(@Query() query: PlaceListFilterQueryDto): Promise<IListCountResponse<PlaceResponseDto>> {
     const [places, count] = await this.placeService.getActivatedPlaces(query);
     return { list: places.map((place) => new PlaceResponseDto(place)), count };
   }
 
   @Get(ApiPath.GetPlaceIdx)
+  @ApiOperation({ summary: '특정 장소 조회', description: '특정 장소의 상세 정보를 조회합니다.' })
+  @ApiOkResponse({ type: PlaceResponseDto })
   async getPlace(@Param() param: PlaceIdxParamDto): Promise<PlaceResponseDto> {
     const result = await this.placeService.getPlaceAllInfo(param.idx);
     if (Array.isArray(result)) {
