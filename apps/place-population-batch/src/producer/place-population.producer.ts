@@ -7,8 +7,7 @@ import { MysqlConfigService } from '../app/mysql/mysql-config.service';
 import { config } from '../app/config/config.service';
 import { Place, PlaceStatus } from '@waggle/entity';
 import { LoggerModule, LoggerService } from '@waggle/logger';
-
-const REDIS_STREAM_KEY = 'place:population:queue';
+import { PLACE_POPULATION_REDIS_KEY } from '../consumer/place-population/place-population.constant';
 
 const TypeOrmRootModule = TypeOrmModule.forRootAsync({ useClass: MysqlConfigService });
 const RedisRootModule = RedisModule.forRoot({ host: config.redisHost, port: config.redisPort });
@@ -48,7 +47,7 @@ async function placePopulationProduce() {
     const pipeline = redisService.client.pipeline();
 
     for (const place of places) {
-      pipeline.xadd(REDIS_STREAM_KEY, '*', 'placeIdx', place.idx, 'name', place.name);
+      pipeline.xadd(PLACE_POPULATION_REDIS_KEY, '*', 'placeIdx', place.idx, 'name', place.name);
     }
 
     await pipeline.exec();

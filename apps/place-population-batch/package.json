@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start:producer": "pnpm ts-node ./src/producer/place-population.producer.ts",
-    "start:consumer": "nest start",
+    "start:consumer": "pnpm run build && nest start",
     "build": "nest build",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",

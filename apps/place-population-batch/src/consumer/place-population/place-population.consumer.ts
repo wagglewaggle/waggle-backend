@@ -30,7 +30,7 @@ export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     try {
-      await this.redis.client.xgroup('CREATE', PLACE_POPULATION_REDIS_KEY, PLACE_POPULATION_REDIS_GROUP, '$', 'MKSTREAM');
+      await this.redis.client.xgroup('CREATE', PLACE_POPULATION_REDIS_KEY, PLACE_POPULATION_REDIS_GROUP, '0', 'MKSTREAM');
     } catch (e) {
       if (!e.message.includes('BUSYGROUP')) {
         this.logger.error('Redis Group Error', e);
