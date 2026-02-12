@@ -1,11 +1,11 @@
-import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { ClientRequestException } from '../exceptions/request.exception';
 import ERROR_CODE from '../exceptions/error-code';
 import { HttpStatus } from '@nestjs/common';
 
 @ValidatorConstraint({ name: 'isString' })
 export class IsString implements ValidatorConstraintInterface {
-  validate(value: any, validationArguments?: ValidationArguments): boolean {
+  validate(value: any): boolean {
     if (typeof value === 'string') {
       return true;
     }

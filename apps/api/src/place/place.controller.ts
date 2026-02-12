@@ -5,7 +5,7 @@ import { PlaceListFilterQueryDto } from './place.dto';
 import { PlaceResponseDto } from './dtos/place-response.dto';
 import { ApiPath } from './place.constant';
 import { PlaceIdxParamDto } from '../app/app.dto';
-import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiListCountResponse } from '../app/utils/swagger.util';
 
 @ApiTags('Place')

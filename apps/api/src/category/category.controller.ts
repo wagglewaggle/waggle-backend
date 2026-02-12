@@ -3,8 +3,7 @@ import { ApiPath } from './category.constant';
 import { CategoryService } from './category.service';
 import { IListResponse } from '../app/interfaces/common.interface';
 import { CategoryTypeService } from '../category-type/category-type.service';
-import { CategoryType } from '@waggle/entity';
-import { ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoryTypeResponseDto } from './dtos/category-type-response.dto';
 import { ApiListCountResponse } from '../app/utils/swagger.util';
 

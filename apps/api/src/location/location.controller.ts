@@ -1,10 +1,9 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { Location } from '@waggle/entity';
 import { GetLocationNameParamDto } from './location.dto';
 import { LocationService } from './location.service';
 import { ApiPath } from './location.constant';
 import { LocationResponseDto } from './dtos/location-response.dto';
-import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IListCountResponse } from '../app/interfaces/common.interface';
 import { ApiListCountResponse } from '../app/utils/swagger.util';
 

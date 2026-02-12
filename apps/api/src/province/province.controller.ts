@@ -2,10 +2,9 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { GetProvinceIdxDto } from './province.dto';
 import { ProvinceService } from './province.service';
 import { ApiPath } from './province.constant';
-import { Province } from '@waggle/entity';
-import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ProvinceResponseDto } from './dtos/province-response.dto';
-import { IListCountResponse, IListResponse } from '../app/interfaces/common.interface';
+import { IListResponse } from '../app/interfaces/common.interface';
 import { ApiListResponse } from '../app/utils/swagger.util';
 
 @ApiTags('Province')
