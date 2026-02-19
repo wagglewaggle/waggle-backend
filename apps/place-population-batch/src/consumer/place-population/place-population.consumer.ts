@@ -47,18 +47,16 @@ export class PlacePopulationConsumer implements OnModuleInit, OnModuleDestroy {
       const start = new Date();
 
       try {
-        const streamData = (await this.redis.client.xreadgroup(
-          'GROUP',
-          PLACE_POPULATION_REDIS_GROUP,
-          this.CONSUMER_NAME,
-          'COUNT',
-          1,
-          'BLOCK',
-          5000,
-          'STREAMS',
-          PLACE_POPULATION_REDIS_KEY,
+        // prettier-ignore
+        const xReadArgs = [
+          'GROUP', PLACE_POPULATION_REDIS_GROUP, this.CONSUMER_NAME,
+          'COUNT', 1,
+          'BLOCK', 5000,
+          'STREAMS', PLACE_POPULATION_REDIS_KEY,
           '>',
-        )) as unknown as any[];
+        ] as const;
+
+        const streamData = (await this.redis.client.xreadgroup(...xReadArgs)) as unknown as any[];
 
         if (!streamData) {
           continue;
