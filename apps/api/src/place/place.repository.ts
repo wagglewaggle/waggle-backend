@@ -27,6 +27,13 @@ export class PlaceRepository {
       .leftJoinAndSelect('category.type', 'categoryType')
       .where('place.status = :status', { status: PlaceStatus.Activated });
 
+    if (query.limit) {
+      queryBuilder.take(query.limit);
+    }
+    if (query.offset) {
+      queryBuilder.skip(query.offset);
+    }
+
     if (query.level) {
       queryBuilder.andWhere('population.level = :level', { level: query.level });
     }

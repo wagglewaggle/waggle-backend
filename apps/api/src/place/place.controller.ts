@@ -1,12 +1,12 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PlaceService } from './place.service';
-import { IListCountResponse } from '../app/interfaces/common.interface';
+import { ListPagingResponse } from '../app/interfaces/common.interface';
 import { PlaceListFilterQueryDto } from './place.dto';
 import { PlaceResponseDto } from './dtos/place-response.dto';
 import { ApiPath } from './place.constant';
 import { PlaceIdxParamDto } from '../app/app.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ApiListCountResponse } from '../app/utils/swagger.util';
+import { ApiListPagingResponse } from '../app/utils/swagger.util';
 
 @ApiTags('Place')
 @Controller(ApiPath.Root)
@@ -15,10 +15,15 @@ export class PlaceController {
 
   @Get()
   @ApiOperation({ summary: '모든 장소 조회', description: '필터링을 통해 모든 장소를 조회합니다.' })
-  @ApiListCountResponse(PlaceResponseDto)
-  async getPlaces(@Query() query: PlaceListFilterQueryDto): Promise<IListCountResponse<PlaceResponseDto>> {
-    const [places, count] = await this.placeService.getActivatedPlaces(query);
-    return { list: places.map((place) => new PlaceResponseDto(place)), count };
+  @ApiListPagingResponse(PlaceResponseDto)
+  async getPlaces(@Query() query: PlaceListFilterQueryDto): Promise<ListPagingResponse<PlaceResponseDto>> {
+    const [places, total] = await this.placeService.getActivatedPlaces(query);
+    return {
+      list: places.map((place) => new PlaceResponseDto(place)),
+      total,
+      offset: query.offset || 0,
+      limit: query.limit || 0,
+    };
   }
 
   @Get(ApiPath.GetPlaceIdx)

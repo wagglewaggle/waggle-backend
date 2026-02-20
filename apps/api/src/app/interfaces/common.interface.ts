@@ -1,7 +1,9 @@
-export interface IListResponse<T> {
+export interface ListResponse<T> {
   list: T[];
 }
 
-export interface IListCountResponse<T> extends IListResponse<T> {
-  count: number;
+export interface ListPagingResponse<T> extends ListResponse<T> {
+  total: number;
+  offset: number;
+  limit: number;
 }

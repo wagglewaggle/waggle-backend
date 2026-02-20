@@ -16,7 +16,7 @@ export const ApiListResponse = (model: string | Function) => {
   });
 };
 
-export const ApiListCountResponse = (model: string | Function) => {
+export const ApiListPagingResponse = (model: string | Function) => {
   return ApiResponse({
     status: 200,
     description: '성공',
@@ -28,6 +28,8 @@ export const ApiListCountResponse = (model: string | Function) => {
           items: { $ref: getSchemaPath(model) },
         },
         total: { type: 'number' },
+        offset: { type: 'number' },
+        limit: { type: 'number' },
       },
     },
   });

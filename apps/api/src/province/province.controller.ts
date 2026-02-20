@@ -4,7 +4,7 @@ import { ProvinceService } from './province.service';
 import { ApiPath } from './province.constant';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ProvinceResponseDto } from './dtos/province-response.dto';
-import { IListResponse } from '../app/interfaces/common.interface';
+import { ListResponse } from '../app/interfaces/common.interface';
 import { ApiListResponse } from '../app/utils/swagger.util';
 
 @ApiTags('Province')
@@ -15,7 +15,7 @@ export class ProvinceController {
   @Get()
   @ApiOperation({ summary: '모든 광역시 조회', description: '모든 광역시 목록을 조회합니다.' })
   @ApiListResponse(ProvinceResponseDto)
-  async getAllProvinces(): Promise<IListResponse<ProvinceResponseDto>> {
+  async getAllProvinces(): Promise<ListResponse<ProvinceResponseDto>> {
     const provinces = await this.provinceService.getAllProvince();
     return { list: provinces.map((province) => new ProvinceResponseDto(province)) };
   }

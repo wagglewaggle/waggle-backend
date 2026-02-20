@@ -20,4 +20,16 @@ export class ListFilterQueryDto {
   @IsOptional()
   @Validate(IsString)
   category: string;
+
+  @ApiProperty({ description: '조회 오프셋', required: false, example: '0' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  offset: number;
+
+  @ApiProperty({ description: '조회 개수', required: false, example: '10' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  limit: number;
 }
