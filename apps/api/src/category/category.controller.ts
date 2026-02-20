@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiPath } from './category.constant';
 import { CategoryService } from './category.service';
-import { ListResponse } from '../app/interfaces/common.interface';
+import { ListResponseDto } from '../common/dtos/responses/common-paging.dto';
 import { CategoryTypeService } from '../category-type/category-type.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoryTypeResponseDto } from './dtos/category-type-response.dto';
@@ -15,8 +15,8 @@ export class CategoryController {
   @Get()
   @ApiOperation({ summary: '카테고리 목록 조회', description: '카테고리 목록을 조회합니다.' })
   @ApiListResponse(CategoryTypeResponseDto)
-  async getCategoryList(): Promise<ListResponse<CategoryTypeResponseDto>> {
+  async getCategoryList(): Promise<ListResponseDto<CategoryTypeResponseDto>> {
     const categoryTypes = await this.categoryTypeService.getCategoryTypeList();
-    return { list: categoryTypes.map((categoryType) => new CategoryTypeResponseDto(categoryType)) };
+    return new ListResponseDto(categoryTypes.map((categoryType) => new CategoryTypeResponseDto(categoryType)));
   }
 }

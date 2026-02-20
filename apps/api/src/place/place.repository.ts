@@ -54,11 +54,11 @@ export class PlaceRepository {
         .setParameters({ type: query.category });
     }
 
-    if (query.populationSort) {
-      queryBuilder.orderBy('population.level', 'DESC');
-    } else {
-      queryBuilder.orderBy('population.level', 'ASC');
-    }
+    queryBuilder.orderBy('place.idx', 'ASC');
+
+    // if (query.populationSort !== undefined) {
+    //   queryBuilder.addOrderBy('population.level', query.populationSort ? 'DESC' : 'ASC');
+    // }
 
     const [places, count] = await queryBuilder.getManyAndCount();
     return [places, count];

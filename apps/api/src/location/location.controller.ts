@@ -4,7 +4,7 @@ import { LocationService } from './location.service';
 import { ApiPath } from './location.constant';
 import { LocationResponseDto } from './dtos/location-response.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ListResponse } from '../app/interfaces/common.interface';
+import { ListResponseDto } from '../common/dtos/responses/common-paging.dto';
 import { ApiListResponse } from '../app/utils/swagger.util';
 
 @ApiTags('Location')
@@ -15,9 +15,9 @@ export class LocationController {
   @Get()
   @ApiOperation({ summary: '모든 지역 조회', description: '모든 지역 목록을 조회합니다.' })
   @ApiListResponse(LocationResponseDto)
-  async getLocationAll(): Promise<ListResponse<LocationResponseDto>> {
+  async getLocationAll(): Promise<ListResponseDto<LocationResponseDto>> {
     const [locations] = await this.locationService.getLocationAll();
-    return { list: locations.map((location) => new LocationResponseDto(location)) };
+    return new ListResponseDto(locations.map((location) => new LocationResponseDto(location)));
   }
 
   @Get(ApiPath.GetLocationName)

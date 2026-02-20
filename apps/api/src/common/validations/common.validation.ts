@@ -1,6 +1,6 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
-import { ClientRequestException } from '../exceptions/request.exception';
-import ERROR_CODE from '../exceptions/error-code';
+import { ClientRequestException } from '../../app/exceptions/request.exception';
+import ERROR_CODE from '../../app/exceptions/error-code';
 import { HttpStatus } from '@nestjs/common';
 
 @ValidatorConstraint({ name: 'isString' })
