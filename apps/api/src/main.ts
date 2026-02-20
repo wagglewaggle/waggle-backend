@@ -1,8 +1,9 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { config } from './app/config/config.service';
+import { swaggerConfig } from './app/config/swagger.config';
 import helmet from 'helmet';
 
 async function bootstrap() {
@@ -14,11 +15,6 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Waggle Waggle API')
-    .setDescription('Waggle Waggle API 문서')
-    .setVersion(config.apiDocVersion)
-    .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, document);
 
