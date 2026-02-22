@@ -2,8 +2,8 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { PlaceRepository } from './place.repository';
 import { LocationService } from '../location/location.service';
 import { Place, Location } from '@waggle/entity';
-import { ClientRequestException } from '../app/exceptions/request.exception';
-import ERROR_CODE from '../app/exceptions/error-code';
+import { ClientRequestException } from '../app/errors/request.exception';
+import { ErrorCode } from '../app/errors/error-code';
 import { PlaceListFilterQueryDto } from './place.dto';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class PlaceService {
   async getPlaceByIdx(idx: number, relation?: string[]): Promise<Place> {
     const [place] = await this.placeRepository.getPlace({ idx }, relation);
     if (!place) {
-      throw new ClientRequestException(ERROR_CODE.ERR_0002001, HttpStatus.BAD_REQUEST);
+      throw new ClientRequestException(ErrorCode.ERR_0020001, HttpStatus.BAD_REQUEST);
     }
 
     return place;

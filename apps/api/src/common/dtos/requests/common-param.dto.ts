@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber } from 'class-validator';
+import { Validate } from 'class-validator';
+import { IsNumber } from '../../validations/common.validation';
 
 export class PlaceIdxParamDto {
   @ApiProperty({ example: 1, description: '장소 idx' })
   @Type(() => Number)
-  @IsNumber()
+  @Validate(IsNumber)
   idx: number;
 }
