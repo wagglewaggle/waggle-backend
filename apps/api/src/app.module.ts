@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RequestMiddleware } from './app/middlewares/request.middleware';
 import { MysqlConfigService } from './app/mysql/mysql-config.service';
 import { ProvinceModule } from './province/province.module';
 import { HealthModule } from './health/health.module';
@@ -13,6 +12,7 @@ import { CategoryTypeModule } from './category-type/category-type.module';
 import { PlaceModule } from './place/place.module';
 import { LoggerModule } from '@waggle/logger';
 import { config } from './app/config/config.service';
+import { RequestContextMiddleware } from './app/contexts/request-context.middleware';
 
 const TypeOrmRootModule = TypeOrmModule.forRootAsync({
   useClass: MysqlConfigService,
@@ -34,6 +34,6 @@ const LoggerRootModule = LoggerModule.forRoot({
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
-    consumer.apply(RequestMiddleware).forRoutes('*');
+    consumer.apply(RequestContextMiddleware).forRoutes('*');
   }
 }

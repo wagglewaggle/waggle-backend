@@ -1,9 +1,9 @@
 import { CallHandler, ExecutionContext, HttpException, Injectable, InternalServerErrorException, NestInterceptor } from '@nestjs/common';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { IRequestAugmented } from '../app.interface';
 import { getClientIp } from 'request-ip';
 import { ILoggingObject } from './logging.constant';
 import { LoggerService } from '@waggle/logger';
+import { RequestAugmented } from '../contexts/request-augmented';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -14,7 +14,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
     const http = context.switchToHttp();
-    const req = http.getRequest<IRequestAugmented>();
+    const req = http.getRequest<RequestAugmented>();
 
     this.logObj = {
       success: true,
