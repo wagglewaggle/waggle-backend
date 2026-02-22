@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Validate } from 'class-validator';
-import { IsString } from '../common/validations/common.validation';
+import { IsString } from '../../../common/validations/common.validation';
 
 export class GetLocationNameParamDto {
   @ApiProperty({

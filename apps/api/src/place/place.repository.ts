@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category, Place, PlaceStatus } from '@waggle/entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { PlaceListFilterQueryDto } from './place.dto';
+import { PlaceListFilterQueryDto } from './dtos/requests/place-query-request.dto';
 
 @Injectable()
 export class PlaceRepository {

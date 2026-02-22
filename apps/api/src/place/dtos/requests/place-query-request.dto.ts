@@ -1,9 +1,9 @@
 import { IsBoolean, IsOptional, Validate } from 'class-validator';
-import { ListFilterQueryDto } from '../common/dtos/requests/common-query.dto';
+import { ListFilterQueryDto } from '../../../common/dtos/requests/common-query.dto';
 import { PlacePopulationLevel } from '@waggle/entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEnum, IsString } from '../common/validations/common.validation';
+import { IsEnum, IsString } from '../../../common/validations/common.validation';
 
 export class PlaceListFilterQueryDto extends ListFilterQueryDto {
   @ApiProperty({

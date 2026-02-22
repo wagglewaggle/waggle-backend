@@ -1,12 +1,12 @@
 import { Exclude, Expose } from 'class-transformer';
-import { CategoryTypeResponseDto } from '../../category/dtos/category-type-response.dto';
-import { CctvResponseDto } from '../../cctv/dto/cctv-response.dto';
-import { LocationResponseDto } from '../../location/dtos/location-response.dto';
 import { Category, Cctv, Place, PlaceAccident, PlacePopulation, PlaceRoadTraffic, Location } from '@waggle/entity';
 import { PlacePopulationResponseDto } from './place-population-response.dto';
 import { PlaceAccidentResponseDto } from './place-accident-response.dto';
 import { PlaceRoadTrafficResponseDto } from './place-road-traffic-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { CategoryTypeResponseDto } from '../../../category/dtos/responses/category-type-response.dto';
+import { CctvResponseDto } from '../../../cctv/dto/responses/cctv-response.dto';
+import { LocationResponseDto } from '../../../location/dtos/responses/location-response.dto';
 
 export class PlaceResponseDto {
   @Exclude() private readonly _idx: number;

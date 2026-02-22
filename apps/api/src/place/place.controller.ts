@@ -1,12 +1,12 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PlaceService } from './place.service';
 import { ListPagingResponseDto } from '../common/dtos/responses/common-paging.dto';
-import { PlaceListFilterQueryDto } from './place.dto';
-import { PlaceResponseDto } from './dtos/place-response.dto';
 import { ApiPath } from './place.constant';
 import { PlaceIdxParamDto } from '../common/dtos/requests/common-param.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiListPagingResponse } from '../app/utils/swagger.util';
+import { PlaceResponseDto } from './dtos/responses/place-response.dto';
+import { PlaceListFilterQueryDto } from './dtos/requests/place-query-request.dto';
 
 @ApiTags('Place')
 @Controller(ApiPath.Root)

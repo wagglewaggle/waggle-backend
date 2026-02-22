@@ -1,7 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Location, Place } from '@waggle/entity';
-import { PlaceLocationResponseDto } from './place-location-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { PlaceLocationResponseDto } from './place-location-response.dto';
 
 export class LocationResponseDto {
   @Exclude() private readonly _idx: number;

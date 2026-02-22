@@ -4,7 +4,7 @@ import { CategoryService } from './category.service';
 import { ListResponseDto } from '../common/dtos/responses/common-paging.dto';
 import { CategoryTypeService } from '../category-type/category-type.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CategoryTypeResponseDto } from './dtos/category-type-response.dto';
+import { CategoryTypeResponseDto } from './dtos/responses/category-type-response.dto';
 import { ApiListResponse } from '../app/utils/swagger.util';
 
 @ApiTags('Category')

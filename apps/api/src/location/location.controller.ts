@@ -1,11 +1,11 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { GetLocationNameParamDto } from './location.dto';
 import { LocationService } from './location.service';
 import { ApiPath } from './location.constant';
-import { LocationResponseDto } from './dtos/location-response.dto';
+import { LocationResponseDto } from './dtos/responses/location-response.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ListResponseDto } from '../common/dtos/responses/common-paging.dto';
 import { ApiListResponse } from '../app/utils/swagger.util';
+import { GetLocationNameParamDto } from './dtos/requests/location-param-request.dto';
 
 @ApiTags('Location')
 @Controller(ApiPath.Root)

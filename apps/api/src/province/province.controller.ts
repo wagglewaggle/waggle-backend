@@ -1,11 +1,11 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { GetProvinceIdxDto } from './province.dto';
 import { ProvinceService } from './province.service';
 import { ApiPath } from './province.constant';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ProvinceResponseDto } from './dtos/province-response.dto';
 import { ListResponseDto } from '../common/dtos/responses/common-paging.dto';
 import { ApiListResponse } from '../app/utils/swagger.util';
+import { GetProvinceIdxParamDto } from './dtos/requests/province-param-request.dto';
+import { ProvinceResponseDto } from './dtos/responses/province-response.dto';
 
 @ApiTags('Province')
 @Controller(ApiPath.Root)
@@ -23,7 +23,7 @@ export class ProvinceController {
   @Get(ApiPath.GetProvinceIdx)
   @ApiOperation({ summary: '특정 광역시 조회', description: '특정 광역시의 상세 정보를 조회합니다.' })
   @ApiOkResponse({ type: ProvinceResponseDto })
-  async getProvince(@Param() param: GetProvinceIdxDto): Promise<ProvinceResponseDto> {
+  async getProvince(@Param() param: GetProvinceIdxParamDto): Promise<ProvinceResponseDto> {
     const province = await this.provinceService.getProvince(param.idx);
     return new ProvinceResponseDto(province);
   }

@@ -4,7 +4,7 @@ import { LocationService } from '../location/location.service';
 import { Place, Location } from '@waggle/entity';
 import { ClientRequestException } from '../app/errors/request.exception';
 import { ErrorCode } from '../app/errors/error-code';
-import { PlaceListFilterQueryDto } from './place.dto';
+import { PlaceListFilterQueryDto } from './dtos/requests/place-query-request.dto';
 
 @Injectable()
 export class PlaceService {
