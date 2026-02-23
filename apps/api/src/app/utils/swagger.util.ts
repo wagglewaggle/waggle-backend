@@ -1,6 +1,7 @@
 import { ApiResponse, getSchemaPath } from '@nestjs/swagger';
+import { Type } from '@nestjs/common';
 
-export const ApiListResponse = (model: string | Function) => {
+export const ApiListResponse = (model: string | Type<unknown>) => {
   return ApiResponse({
     status: 200,
     description: '성공',
@@ -16,7 +17,7 @@ export const ApiListResponse = (model: string | Function) => {
   });
 };
 
-export const ApiListPagingResponse = (model: string | Function) => {
+export const ApiListPagingResponse = (model: string | Type<unknown>) => {
   return ApiResponse({
     status: 200,
     description: '성공',

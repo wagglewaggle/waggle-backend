@@ -11,7 +11,7 @@ export class ListPagingResponseDto<T> extends ListResponseDto<T> {
   offset: number;
   limit: number;
 
-  constructor(data: T[], total: number, offset: number = 0, limit: number = 10) {
+  constructor(data: T[], total: number, offset = 0, limit = 10) {
     super(data);
 
     this.total = total;
