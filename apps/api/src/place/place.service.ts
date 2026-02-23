@@ -8,7 +8,10 @@ import { PlaceListFilterQueryDto } from './dtos/requests/place-query-request.dto
 
 @Injectable()
 export class PlaceService {
-  constructor(private readonly placeRepository: PlaceRepository, private readonly locationService: LocationService) {}
+  constructor(
+    private readonly placeRepository: PlaceRepository,
+    private readonly locationService: LocationService,
+  ) {}
 
   async getActivatedPlaces(query: PlaceListFilterQueryDto): Promise<[Place[], number]> {
     return await this.placeRepository.getActivatedPlaces(query);

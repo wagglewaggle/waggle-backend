@@ -14,8 +14,6 @@ export class MysqlConfigService implements TypeOrmOptionsFactory {
       timezone: 'Z',
       logging: false,
       synchronize: false,
-      keepConnectionAlive: true,
-      // autoLoadEntities: true,
     };
   }
 }

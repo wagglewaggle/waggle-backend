@@ -2,15 +2,16 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, NotFo
 import { ClientRequestException } from '../errors/request.exception';
 import { ErrorCode } from '../errors/error-code';
 import { fillTemplate } from '../utils/string.util';
+import { Response } from 'express';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): any {
     const ctx = host.switchToHttp();
-    const res = ctx.getResponse();
+    const res = ctx.getResponse<Response>();
 
     let statusCode = 500;
-    const sendData: any = {
+    const sendData: { errorCode: string; message: string } = {
       errorCode: 'ERR_0000001',
       message: ErrorCode.ERR_0000001,
     };
@@ -18,7 +19,7 @@ export class AllExceptionFilter implements ExceptionFilter {
     if (exception instanceof ClientRequestException) {
       statusCode = exception.getStatus();
 
-      sendData.message = exception.getResponse();
+      sendData.message = exception.getResponse() as string;
       sendData.errorCode = this.getErrorCode(sendData.message);
 
       if (Object.keys(exception.value).length > 0) {

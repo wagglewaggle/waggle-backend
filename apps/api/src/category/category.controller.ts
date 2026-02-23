@@ -10,7 +10,10 @@ import { ApiListResponse } from '../app/utils/swagger.util';
 @ApiTags('Category')
 @Controller(ApiPath.Root)
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService, private readonly categoryTypeService: CategoryTypeService) {}
+  constructor(
+    private readonly categoryService: CategoryService,
+    private readonly categoryTypeService: CategoryTypeService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: '카테고리 목록 조회', description: '카테고리 목록을 조회합니다.' })
