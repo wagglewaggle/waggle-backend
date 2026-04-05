@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:api": "pnpm --filter api build",
+    "build:package": "pnpm --filter \"./packages/**\" build"
   },
   "keywords": [],
   "author": "",
