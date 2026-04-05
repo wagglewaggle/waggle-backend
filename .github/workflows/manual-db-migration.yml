@@ -1,0 +1,122 @@
+name: Manual DB Migration (TypeORM)
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_mode:
+        type: choice
+        description: '실행 모드를 선택하세요.'
+        options:
+          - all       # 모든 미실행 마이그레이션 실행
+          - specific  # 특정 마이그레이션만 실행
+        default: 'all'
+      specific_names:
+        type: string
+        description: '[specific 모드 전용] 파일명 또는 타임스탬프를 입력하세요 (예: 161234-CreateUser 또는 161234-CreateUser.ts). 쉼표로 다중 입력 가능.'
+        required: false
+      confirm_execution:
+        type: boolean
+        description: '⚠️ [필수] 정말로 DB 마이그레이션을 실행하시겠습니까? (체크하지 않으면 중단됩니다)'
+        required: true
+        default: false
+
+env:
+  DB_HOST: ${{ secrets.DB_HOST }}
+  DB_PORT: ${{ secrets.DB_PORT }}
+  DB_USER: ${{ secrets.DB_USER }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+
+jobs:
+  migrate:
+    name: Run Database Migration
+    runs-on: ubuntu-latest
+
+    # 실행 여부 확인. false면 Job 자체가 실행되지 않음
+    if: github.event.inputs.confirm_execution == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      # 선택된 모드에 따라 TypeORM 실행
+      - name: Execute Migrations
+        run: |
+          MODE="${{ github.event.inputs.run_mode }}"
+          SPECIFIC_NAMES="${{ github.event.inputs.specific_names }}"
+          
+          ROOT_DIR="packages/entity/migrations"
+          MIGRATIONS_DIR="migrations" 
+
+          echo "🚀 Migration Mode: $MODE"
+
+          if [ "$MODE" = "all" ]; then
+            echo "Run all pending migrations."
+            pnpm --filter @waggle/entity migration:run
+          
+          elif [ "$MODE" = "specific" ]; then
+            if [ -z "$SPECIFIC_NAMES" ]; then
+              echo "❌ You have selected specific mode, but the file name was not entered."
+              exit 1
+            fi
+          
+            echo "🔍 Start validation with the file name you entered: $SPECIFIC_NAMES"
+          
+            IFS=',' read -ra ADDR <<< "$SPECIFIC_NAMES"
+            RESOLVED_PATHS=""
+
+            for name in "${ADDR[@]}"; do
+              CLEAN_NAME=$(echo $name | xargs) # 공백 제거
+          
+              # 사용자가 .ts 확장자를 빼먹었을 경우 자동으로 붙여주기
+              if [[ "$CLEAN_NAME" != *.ts ]]; then
+                CLEAN_NAME="${CLEAN_NAME}.ts"
+              fi
+          
+              # 디렉토리 경로와 결합하여 최종 경로 완성
+              FULL_PATH="$ROOT_DIR/$CLEAN_NAME"
+              # 실제 마이그레이션 경로는 프로젝트 기준이므로, "migrations/"로 고정
+              MIGRATION_PATH="$MIGRATION_DIR/$CLEAN_NAME"
+          
+              # 해당 경로에 파일이 실제로 존재하는지 엄격하게 체크
+              if [ ! -f "$FULL_PATH" ]; then
+                echo "❌ ERROR: File not found. Please check the file name or timestamp. (Requested path: $FULL_PATH)"
+                exit 1
+              fi
+          
+              echo "✅ Successfully checking file: $FULL_PATH"
+              RESOLVED_PATHS="$RESOLVED_PATHS,$MIGRATION_PATH"
+            done
+          
+            # 맨 앞의 콤마(,) 제거
+            RESOLVED_PATHS=${RESOLVED_PATHS#,}
+          
+            echo "🚀 Result"
+            echo "$RESOLVED_PATHS" | tr ',' '\n' | sed 's/^/  - /'
+          
+            # 💡 완성된 전체 경로를 환경변수에 담아 TypeORM 실행
+            TYPEORM_MIGRATION_PATHS="$RESOLVED_PATHS" pnpm --filter @waggle/entity migration:run
+          fi
+
+      # 남은 마이그레이션 목록 반환
+      - name: Check Pending Migrations
+        if: always()
+        run: |
+          echo "📊 Status after migration:"
+          
+          # 실행되지 않은 남은 마이그레이션 리스트 출력
+          pnpm --filter @waggle/entity migration:show || echo "All migrations are up to date, or an error occurred during verification."
