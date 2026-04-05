@@ -31,7 +31,12 @@ jobs:
         run: pnpm install
 
       - name: Run Packages build
-        run: pnpm run build:package
+        id: build-packages
+        run: pnpm run build:packaged
+
+      - name: Build Packages Failure Log
+        if: failure() && steps.build-packages.outcome == 'failure'
+        run: echo "❌ Failed build packages"
 
       - name: Run API App build
         run: pnpm run build:api
