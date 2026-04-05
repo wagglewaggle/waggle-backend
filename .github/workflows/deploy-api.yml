@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - develop/waggle-1.0.0
-  workflow_dispatch:
-
 
 jobs:
   build:
@@ -33,10 +31,6 @@ jobs:
       - name: Run Packages build
         id: build-packages
         run: pnpm run build:packaged
-
-      - name: Build Packages Failure Log
-        if: failure() && steps.build-packages.outcome == 'failure'
-        run: echo "❌ Failed build packages"
 
       - name: Run API App build
         run: pnpm run build:api

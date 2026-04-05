@@ -1,0 +1,73 @@
+name: Manual Deploy Apps
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_apps:
+        description: '빌드할 앱 이름을 입력하세요 (쉼표로 구분, 예: api, admin). 전체 빌드는 all 입력'
+        required: true
+        default: 'all'
+
+jobs:
+  build:
+    name: Build Selected Apps
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      # [조건 5, 6] 모든 앱 빌드 전, 공통 패키지는 딱 한 번만 빌드합니다.
+      - name: Run Common Packages Build
+        run: pnpm run build:package
+
+      # [조건 1, 2, 3, 4] 입력값에 따라 빌드 대상을 동적으로 결정하고 실행합니다.
+      - name: Build Selected Applications
+        run: |
+          INPUT_APPS="${{ github.event.inputs.target_apps }}"
+          BUILD_FILTER=""
+          
+          ###################
+          #  Build 대상 선택  #
+          ###################
+          
+          if [ "$INPUT_APPS" = "all" ]; then
+            echo "모든 앱을 빌드합니다."
+            # apps/ 하위 디렉토리를 찾아 자동으로 필터를 생성합니다.
+            APPS=$(find apps -maxdepth 1 -type d -not -path apps | sed 's|apps/||')
+            for app in $APPS; do
+              BUILD_FILTER="$BUILD_FILTER --filter $app"
+            done
+          else
+            echo "선택된 앱들을 빌드합니다: $INPUT_APPS"
+            # 쉼표로 구분된 입력을 분리하여 pnpm 필터로 변환합니다.
+            IFS=',' read -ra ADDR <<< "$INPUT_APPS"
+            for app in "${ADDR[@]}"; do
+              # 앞뒤 공백 제거 후 필터 추가
+              CLEAN_APP=$(echo $app | xargs)
+              BUILD_FILTER="$BUILD_FILTER --filter $CLEAN_APP"
+            done
+          fi
+
+          # 하나의 명령어(pnpm)로 병렬 빌드를 수행하여 효율을 높입니다.
+          if [ -n "$BUILD_FILTER" ]; then
+            echo "실행 명령어: pnpm $BUILD_FILTER build"
+            pnpm $BUILD_FILTER build
+          else
+            echo "빌드할 대상을 찾지 못했습니다."
+            exit 1
+          fi
