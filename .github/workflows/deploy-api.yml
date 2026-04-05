@@ -1,9 +1,9 @@
 name: Build and Develop
 
-on:
-  push:
-    branches:
-      - develop/waggle-1.0.0
+#on:
+#  push:
+#    branches:
+#      - develop/waggle-1.0.0
 
 jobs:
   build:

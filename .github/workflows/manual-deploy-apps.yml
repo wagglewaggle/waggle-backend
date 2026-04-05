@@ -1,17 +1,65 @@
-name: Manual Deploy Apps
+name: Manual Parallel Matrix Build
 
 on:
   workflow_dispatch:
     inputs:
       target_apps:
-        description: '빌드할 앱 이름을 입력하세요 (쉼표로 구분, 예: api, admin). 전체 빌드는 all 입력'
+        description: '빌드할 앱 이름을 입력하세요 (쉼표 구분, 예: api, admin). 전체 빌드는 all 입력'
         required: true
         default: 'all'
 
 jobs:
-  build:
-    name: Build Selected Apps
+  # [Step 1] 빌드 대상을 결정하고 Matrix 데이터를 생성하는 Job
+  prepare-matrix:
+    name: Prepare Matrix
     runs-on: ubuntu-latest
+    outputs:
+      app_list: ${{ steps.set-matrix.outputs.app_list }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Detect and Filter Apps
+        id: set-matrix
+        run: |
+          INPUT_APPS="${{ github.event.inputs.target_apps }}"
+          
+          # 실제 apps 폴더 하위 프로젝트 감지
+          ALL_APPS=$(find apps -maxdepth 1 -type d -not -path apps | sed 's|apps/||' | sort)
+          echo "Detected all apps: $ALL_APPS"
+
+          SELECTED_APPS=()
+          if [ "$INPUT_APPS" = "all" ]; then
+            # 전체 빌드인 경우 감지된 모든 앱 추가
+            for app in $ALL_APPS; do
+              SELECTED_APPS+=("$app")
+            done
+          else
+            # 쉼표로 입력받은 앱들을 검증 후 추가
+            IFS=',' read -ra ADDR <<< "$INPUT_APPS"
+            for app in "${ADDR[@]}"; do
+              CLEAN_APP=$(echo $app | xargs)
+              if echo "$ALL_APPS" | grep -q -w "$CLEAN_APP"; then
+                SELECTED_APPS+=("$CLEAN_APP")
+              fi
+            done
+          fi
+
+          # JSON 배열 형태로 변환
+          APPS_JSON=$(printf '%s\n' "${SELECTED_APPS[@]}" | jq -R . | jq -s -c .)
+          echo "Selected for matrix: $APPS_JSON"
+          echo "app_list=$APPS_JSON" >> $GITHUB_OUTPUT
+
+  # [Step 2] 선택된 앱들을 Matrix로 병렬 빌드하는 Job
+  build-apps:
+    name: Build App (${{ matrix.app }})
+    needs: prepare-matrix
+    runs-on: ubuntu-latest
+    if: needs.prepare-matrix.outputs.app_list != '[]'
+    strategy:
+      fail-fast: false # 하나가 실패해도 다른 앱 빌드는 계속 진행
+      matrix:
+        app: ${{ fromJson(needs.prepare-matrix.outputs.app_list) }}
 
     steps:
       - name: Checkout code
@@ -25,49 +73,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: 'pnpm'
 
       - name: Install Dependencies
         run: pnpm install
 
-      # [조건 5, 6] 모든 앱 빌드 전, 공통 패키지는 딱 한 번만 빌드합니다.
+      # [조건 5, 6] 각 Matrix Runner에서 독립적으로 사전 작업 수행
       - name: Run Common Packages Build
         run: pnpm run build:package
 
-      # [조건 1, 2, 3, 4] 입력값에 따라 빌드 대상을 동적으로 결정하고 실행합니다.
-      - name: Build Selected Applications
-        run: |
-          INPUT_APPS="${{ github.event.inputs.target_apps }}"
-          BUILD_FILTER=""
-          
-          ###################
-          #  Build 대상 선택  #
-          ###################
-          
-          if [ "$INPUT_APPS" = "all" ]; then
-            echo "모든 앱을 빌드합니다."
-            # apps/ 하위 디렉토리를 찾아 자동으로 필터를 생성합니다.
-            APPS=$(find apps -maxdepth 1 -type d -not -path apps | sed 's|apps/||')
-            for app in $APPS; do
-              BUILD_FILTER="$BUILD_FILTER --filter $app"
-            done
-          else
-            echo "선택된 앱들을 빌드합니다: $INPUT_APPS"
-            # 쉼표로 구분된 입력을 분리하여 pnpm 필터로 변환합니다.
-            IFS=',' read -ra ADDR <<< "$INPUT_APPS"
-            for app in "${ADDR[@]}"; do
-              # 앞뒤 공백 제거 후 필터 추가
-              CLEAN_APP=$(echo $app | xargs)
-              BUILD_FILTER="$BUILD_FILTER --filter $CLEAN_APP"
-            done
-          fi
-
-          # 하나의 명령어(pnpm)로 병렬 빌드를 수행하여 효율을 높입니다.
-          if [ -n "$BUILD_FILTER" ]; then
-            echo "실행 명령어: pnpm $BUILD_FILTER build"
-            pnpm $BUILD_FILTER build
-          else
-            echo "빌드할 대상을 찾지 못했습니다."
-            exit 1
-          fi
+      - name: Run Target App Build
+        run: pnpm --filter ${{ matrix.app }} build
